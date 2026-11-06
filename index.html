@@ -3,19 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>IA en 2026</title>
-<meta name="description" content="Presentación interactiva: novedades de inteligencia artificial a noviembre de 2026, para clase.">
+<title>IA en 2026 · Ivo Kalinowski</title>
+<meta name="author" content="Ivo Kalinowski">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1224 885'%3E%3Crect width='1224' height='885' fill='%23111'/%3E%3Cpath fill='%23fff' d='M263 200h116v492H263zM525 200h116v172l192-172h129L718 437l244 255H833L641 513v179H525z'/%3E%3C/svg%3E">
+<meta name="description" content="Presentación interactiva: novedades de inteligencia artificial a noviembre de 2026. Por Ivo Kalinowski: tecnología con criterio humano.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#000; --bg2:#0b0b0f; --fg:#f5f5f7; --muted:#a1a1a6; --dim:#6e6e73;
+  --bg:#111111; --bg2:#0b0b0f; --fg:#f5f5f7; --muted:#a1a1a6; --dim:#6e6e73;
   --card:rgba(255,255,255,.055); --card2:rgba(255,255,255,.09); --line:rgba(255,255,255,.12);
   --blue:#2997ff; --purple:#a78bfa; --pink:#ff6b9a; --orange:#ff9f0a; --green:#30d158; --teal:#64d2ff; --yellow:#ffd60a;
   --grad:linear-gradient(100deg,#64d2ff 0%,#2997ff 30%,#a78bfa 62%,#ff6b9a 100%);
   --radius:22px; --ease:cubic-bezier(.2,.8,.2,1);
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font:"Schibsted Grotesk",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --tinta:#111111; --papel:#fafaf7; --lavanda:#ddd7f6; --menta:#cdebdc;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow:hidden}
@@ -30,7 +34,7 @@ a:hover{text-decoration:underline}
   background:radial-gradient(1200px 700px at 85% -10%,rgba(41,151,255,.10),transparent 60%),radial-gradient(900px 600px at -10% 110%,rgba(167,139,250,.08),transparent 60%),var(--bg)}
 .slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .7s var(--ease),transform .9s var(--ease),visibility 0s}
 .slide.prev{transform:scale(.975)}
-.slide.light{--fg:#1d1d1f;--muted:#515154;--dim:#86868b;--card:rgba(0,0,0,.04);--card2:rgba(0,0,0,.07);--line:rgba(0,0,0,.1);background:#f5f5f7;color:var(--fg)}
+.slide.light{--fg:#111111;--muted:#515154;--dim:#86868b;--card:rgba(0,0,0,.04);--card2:rgba(0,0,0,.07);--line:rgba(0,0,0,.1);background:var(--papel);color:var(--fg)}
 .wrap{max-width:1180px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center}
 .slide::-webkit-scrollbar{width:8px}.slide::-webkit-scrollbar-thumb{background:rgba(127,127,127,.3);border-radius:8px}
 
@@ -42,7 +46,18 @@ a:hover{text-decoration:underline}
 .slide.active .r:nth-child(6){transition-delay:.40s}.slide.active .r:nth-child(7){transition-delay:.48s}
 
 /* type */
-.eyebrow{font-size:clamp(13px,1.2vw,15px);font-weight:600;letter-spacing:.02em;color:var(--orange);margin-bottom:14px}
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta);background:var(--lavanda);padding:5px 9px;width:fit-content;align-self:flex-start;margin-bottom:16px}
+.eyebrow.edu{background:var(--menta)}
+.hl{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em;background:var(--lavanda);color:var(--tinta);display:inline-block;line-height:.98;padding:.03em .14em .07em;margin-top:.14em}
+.ik{display:block;fill:currentColor;aspect-ratio:1224/885}
+.sig{font-size:clamp(15px,1.5vw,18px);color:var(--muted);margin-top:22px}
+.sig b{color:var(--fg);font-weight:600}
+.sig em{font-family:var(--serif);font-size:1.22em;color:var(--fg)}
+.signoff{display:flex;align-items:center;gap:14px;margin-top:28px}
+.signoff .ik{height:44px}
+.signoff b{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.signoff em{font-family:var(--serif);font-size:19px;color:var(--muted)}
+::selection{background:var(--lavanda);color:var(--tinta)}
 h1{font-size:clamp(44px,8.4vw,112px);line-height:1.02;letter-spacing:-.045em;font-weight:800}
 h2{font-size:clamp(34px,5.2vw,68px);line-height:1.05;letter-spacing:-.035em;font-weight:700;margin-bottom:18px}
 h3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.015em;font-weight:650;line-height:1.2}
@@ -75,7 +90,7 @@ p{line-height:1.5}
 .src a{color:var(--dim);text-decoration:underline}
 
 /* ---------- cover ---------- */
-.cover{background:#000}
+.cover{background:var(--tinta)}
 .cover .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;animation:float 14s ease-in-out infinite}
 .cover .o1{width:520px;height:520px;background:#2997ff;top:-120px;right:-80px}
 .cover .o2{width:460px;height:460px;background:#a78bfa;bottom:-160px;left:-120px;animation-delay:-5s}
@@ -224,8 +239,11 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 #bar .tm{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;padding:0 10px;border-left:1px solid rgba(255,255,255,.12);color:#a1a1a6;cursor:pointer}
 #bar .tm.run{color:var(--green)}
 @media (max-width:700px){#bar .ttl{display:none}}
-#progress{position:fixed;top:0;left:0;height:3px;background:var(--grad);z-index:60;transition:width .6s var(--ease)}
-#brand{position:fixed;top:18px;left:22px;z-index:40;font-size:13px;font-weight:600;color:var(--muted);mix-blend-mode:difference;color:#bbb;pointer-events:none}
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--lavanda);z-index:60;transition:width .6s var(--ease)}
+#brand{position:fixed;top:12px;left:14px;z-index:40;display:flex;align-items:center;gap:10px;padding:7px 10px;font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--papel);background:var(--tinta);pointer-events:none;transition:opacity .4s}
+#brand .ik{height:26px}
+body.on-light #brand{color:var(--tinta);background:var(--papel)}
+body.on-light #progress{background:var(--tinta)}
 
 #overview{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.82);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);display:none;overflow:auto;padding:70px clamp(16px,5vw,70px)}
 #overview.on{display:block;animation:pop .4s var(--ease)}
@@ -249,7 +267,8 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 </head>
 <body>
 <div id="progress"></div>
-<div id="brand">UCV · Novedades IA</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="ik" viewBox="0 0 1224 885"><path fill-rule="evenodd" d="M0 0H1224V885H0ZM38 38V847H1186V38Z"/><rect x="263" y="200" width="116" height="492" rx="10"/><path d="M533 208H633V390L836 208H942L706.7 436.7L943 684H836L633 495V684H533Z" stroke="currentColor" stroke-width="16" stroke-linejoin="round"/></symbol></svg>
+<div id="brand"><svg class="ik" role="img" aria-label="Logo IK"><use href="#ik"/></svg><span>Ivo Kalinowski</span></div>
 
 <main id="deck">
 
@@ -260,6 +279,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
     <div class="eyebrow r">Gestión del aprendizaje con IA · Noviembre 2026</div>
     <h1 class="r">La IA ya no<br><span class="grad">solo responde.</span><br>Ahora trabaja.</h1>
     <p class="lead r mt24">Un recorrido de 30 minutos por lo que cambió este año: los modelos, Anthropic, la carrera hacia la AGI, lo que puedes construir en clase y cómo se está transformando la educación.</p>
+    <p class="sig r"><b>Por Ivo Kalinowski</b> · <em>Tecnología con criterio humano.</em></p>
     <div class="meta r">
       <span class="chip">🗓️ Actualizado al 4 nov 2026</span>
       <span class="chip">🎬 Clips cortos de video</span>
@@ -418,7 +438,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 <!-- 8 · ANTHROPIC IPO -->
 <section class="slide light" data-title="Anthropic sale a bolsa" data-min="2" data-notes="<ul><li>26 oct: Anthropic publicó su prospecto (S-1) para cotizar en Nasdaq con el ticker <b>ANT</b>. Se reporta una valorización objetivo cercana a US$2 billones y salida antes del 26 de noviembre (no confirmado).</li><li>Dato curioso: casi 100 páginas del documento son de <b>riesgos</b>, incluidos riesgos de la propia tecnología.</li><li>Gobierno corporativo: es una Corporación de Beneficio Público y un fideicomiso (Long-Term Benefit Trust) nombra a la mayoría del directorio.</li><li><b>No es consejo financiero.</b></li></ul>">
   <div class="wrap">
-    <div class="eyebrow r" style="color:#bf4800">06 · Anthropic</div>
+    <div class="eyebrow r">06 · Anthropic</div>
     <h2 class="r">De laboratorio de seguridad<br>a <span class="grad">la bolsa de Nueva York.</span></h2>
     <div class="grid g4 mt24 r">
       <div class="card"><div class="stat">ANT</div><p class="mt8">Ticker en Nasdaq. Prospecto (S-1) público desde el 26 oct.</p><div class="src">TechCrunch · CNN</div></div>
@@ -515,7 +535,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 <!-- 12 · CASOS DE ÉXITO -->
 <section class="slide light" data-title="Empresas que se movieron" data-min="3" data-notes="<ul><li>Los casos que funcionan tienen algo en común: <b>tareas acotadas + humano supervisando</b>, no autonomía total.</li><li>Contrapeso honesto: muchas empresas aún no ven retorno medible en el primer año.</li><li>Clip: Gustavo Entrala sobre la IA y los empleos (primeros 2:30).</li><li>Pregunta: <i>¿qué tarea de su futura profesión se parece a estos casos?</i></li></ul>">
   <div class="wrap">
-    <div class="eyebrow r" style="color:#bf4800">10 · Casos de éxito</div>
+    <div class="eyebrow r">10 · Casos de éxito</div>
     <h2 class="r">Empresas que <span class="grad">se movieron.</span></h2>
     <div class="grid g3 mt24 r">
       <div class="card case"><span class="conf" style="color:#248a3d">Logística · C.H. Robinson</span><div class="num">23 h → 14 min</div><p>Tiempo para llevar un cambio de software a producción, con agentes de desarrollo.</p><div class="src">Caso reportado por proveedor</div></div>
@@ -535,7 +555,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 <!-- 13 · EDUCACIÓN -->
 <section class="slide" data-title="La IA en la educación" data-min="3" data-notes="<ul><li>Dato central: casi todos los estudiantes ya usan IA, pero solo 3 de cada 10 sienten que su institución la integra bien. <b>La brecha no es tecnológica, es pedagógica.</b></li><li>Las universidades top ya eligieron: Stanford ofrece tres plataformas; Harvard (FAS) suma Claude; UT Austin invirtió ~US$4,2 M.</li><li>Perú: la Ley 31814 y su reglamento; el Minedu impulsa DocenteTec y un plan de uso de IA en el proceso educativo.</li><li>Clip: Pocho Costa en TEDx sobre creatividad e IA (primeros 3 min).</li></ul>">
   <div class="wrap">
-    <div class="eyebrow r">11 · Educación</div>
+    <div class="eyebrow edu r">11 · Educación</div>
     <h2 class="r">Los estudiantes ya llegaron.<br><span class="grad">¿Y las instituciones?</span></h2>
     <div class="grid g3 mt24 r">
       <div class="card"><div class="stat grad">92%</div><p class="mt8">De estudiantes en América Latina usa IA. Docentes: 79%.</p><div class="src">Digital Education Council + Tec de Monterrey · +30.000 personas</div></div>
@@ -563,7 +583,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 <!-- 14 · PROFESORES -->
 <section class="slide" data-title="Qué pueden hacer los profesores hoy" data-min="3" data-notes="<ul><li>Demostración en vivo: elige una tarea, escribe el curso y copia el prompt en Claude, ChatGPT o Gemini.</li><li>Fíjate que el prompt incluye la regla: <b>no compartir datos personales de estudiantes</b>.</li><li>Mensaje: evaluar el <b>proceso</b> (borradores, defensa oral, bitácora de prompts), no solo el producto.</li></ul>">
   <div class="wrap">
-    <div class="eyebrow r">12 · Para docentes</div>
+    <div class="eyebrow edu r">12 · Para docentes</div>
     <h2 class="r">Tu asistente de clase, <span class="grad">en un prompt.</span></h2>
     <div class="split mt16" style="align-items:start">
       <div class="r">
@@ -595,7 +615,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 <!-- 15 · ÉTICA -->
 <section class="slide light" data-title="Límites y ética" data-min="2" data-notes="<ul><li>Tres riesgos para conversar: privacidad, dependencia y poder.</li><li>Clip 1: lo que nunca debes contarle a un chatbot (2 min).</li><li>Clip 2: Gustavo Entrala sobre el Papa León XIV y la IA: 'humano = libertad' (1 min).</li></ul>">
   <div class="wrap">
-    <div class="eyebrow r" style="color:#bf4800">13 · Con criterio</div>
+    <div class="eyebrow r">13 · Con criterio</div>
     <h2 class="r">Más poder exige <span class="grad">más criterio.</span></h2>
     <div class="grid g4 mt24 r">
       <div class="card"><span class="icon">🔒</span><h3>Privacidad</h3><p>Nada de datos personales, notas ni información sensible de terceros en herramientas no institucionales.</p></div>
@@ -638,7 +658,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
   <div class="orb o1"></div><div class="orb o2"></div>
   <div class="wrap">
     <div class="eyebrow r">Para llevarse</div>
-    <h1 class="r" style="font-size:clamp(40px,6.6vw,88px)">La tecnología ya llegó.<br><span class="grad">Falta el criterio.</span></h1>
+    <h1 class="r" style="font-size:clamp(40px,6.6vw,88px)">La tecnología ya llegó.<br>Falta el <span class="hl">criterio.</span></h1>
     <div class="split mt32" style="align-items:start">
       <div class="r">
         <div class="grid" style="gap:10px">
@@ -650,6 +670,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
       <div class="r">
         <div class="video" data-id="Cy-QlQg0aOs" data-start="723" data-end="818" data-lang="ES" data-title="La brecha: los modelos van adelante, la gente atrás" data-ch="Benjamín Cordero · 28 oct 2026"></div>
         <p class="lead mt24" style="font-size:20px">¿Preguntas? <span class="muted">Prueben, rompan, construyan.</span></p>
+        <div class="signoff"><svg class="ik" role="img" aria-label="Logo IK"><use href="#ik"/></svg><div><b>Ivo Kalinowski</b><em>Tecnología con criterio humano.</em></div></div>
       </div>
     </div>
   </div>
@@ -658,7 +679,7 @@ select:focus,input[type=text]:focus{border-color:var(--blue)}
 <!-- 19 · FUENTES -->
 <section class="slide light" data-title="Fuentes" data-min="0" data-notes="<ul><li>Diapositiva de respaldo. Compártela si te piden las referencias.</li></ul>">
   <div class="wrap">
-    <div class="eyebrow r" style="color:#bf4800">Referencias</div>
+    <div class="eyebrow r">Referencias</div>
     <h2 class="r">Fuentes.</h2>
     <p class="small r">Consultadas el 4 de noviembre de 2026. Las cifras marcadas como "reportado" provienen de prensa o de las propias empresas y pueden cambiar.</p>
     <div class="grid g3 mt24 r small" id="sources"></div>
@@ -883,6 +904,7 @@ $('#og').innerHTML=slides.map((s,i)=>`<button data-i="${i}"><span class="on2">${
 $$('#og button').forEach(b=>b.onclick=()=>{go(+b.dataset.i);toggleOv(false);});
 function go(n){ n=Math.max(0,Math.min(slides.length-1,n)); if(n!==cur) stopVideos();
   slides.forEach((s,i)=>{ s.classList.toggle('active',i===n); s.classList.toggle('prev',i<n); });
+  document.body.classList.toggle('on-light',slides[n].classList.contains('light'));
   cur=n; slides[n].scrollTop=0;
   $('#bTitle').textContent=slides[n].dataset.title; $('#bCtr').textContent=(n+1)+' / '+slides.length;
   $('#progress').style.width=((n)/(slides.length-1)*100)+'%';
