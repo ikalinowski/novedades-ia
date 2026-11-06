@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IA en 2026</title>
+<meta name="description" content="Presentación interactiva: novedades de inteligencia artificial a noviembre de 2026, para clase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000; --bg2:#0b0b0f; --fg:#f5f5f7; --muted:#a1a1a6; --dim:#6e6e73;
+  --card:rgba(255,255,255,.055); --card2:rgba(255,255,255,.09); --line:rgba(255,255,255,.12);
+  --blue:#2997ff; --purple:#a78bfa; --pink:#ff6b9a; --orange:#ff9f0a; --green:#30d158; --teal:#64d2ff; --yellow:#ffd60a;
+  --grad:linear-gradient(100deg,#64d2ff 0%,#2997ff 30%,#a78bfa 62%,#ff6b9a 100%);
+  --radius:22px; --ease:cubic-bezier(.2,.8,.2,1);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- deck ---------- */
+#deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;visibility:hidden;transform:scale(1.025);
+  transition:opacity .7s var(--ease),transform .9s var(--ease),visibility 0s linear .7s;padding:clamp(64px,8vh,96px) clamp(16px,5vw,80px) 120px;
+  background:radial-gradient(1200px 700px at 85% -10%,rgba(41,151,255,.10),transparent 60%),radial-gradient(900px 600px at -10% 110%,rgba(167,139,250,.08),transparent 60%),var(--bg)}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .7s var(--ease),transform .9s var(--ease),visibility 0s}
+.slide.prev{transform:scale(.975)}
+.slide.light{--fg:#1d1d1f;--muted:#515154;--dim:#86868b;--card:rgba(0,0,0,.04);--card2:rgba(0,0,0,.07);--line:rgba(0,0,0,.1);background:#f5f5f7;color:var(--fg)}
+.wrap{max-width:1180px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center}
+.slide::-webkit-scrollbar{width:8px}.slide::-webkit-scrollbar-thumb{background:rgba(127,127,127,.3);border-radius:8px}
+
+/* reveal */
+.r{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.slide.active .r{opacity:1;transform:none}
+.slide.active .r:nth-child(2){transition-delay:.08s}.slide.active .r:nth-child(3){transition-delay:.16s}
+.slide.active .r:nth-child(4){transition-delay:.24s}.slide.active .r:nth-child(5){transition-delay:.32s}
+.slide.active .r:nth-child(6){transition-delay:.40s}.slide.active .r:nth-child(7){transition-delay:.48s}
+
+/* type */
+.eyebrow{font-size:clamp(13px,1.2vw,15px);font-weight:600;letter-spacing:.02em;color:var(--orange);margin-bottom:14px}
+h1{font-size:clamp(44px,8.4vw,112px);line-height:1.02;letter-spacing:-.045em;font-weight:800}
+h2{font-size:clamp(34px,5.2vw,68px);line-height:1.05;letter-spacing:-.035em;font-weight:700;margin-bottom:18px}
+h3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.015em;font-weight:650;line-height:1.2}
+.lead{font-size:clamp(18px,2vw,26px);line-height:1.38;color:var(--muted);letter-spacing:-.01em;max-width:860px}
+.lead b,.lead strong{color:var(--fg);font-weight:600}
+p{line-height:1.5}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--muted)}.dim{color:var(--dim)}
+.small{font-size:14px;color:var(--muted);line-height:1.45}
+.tiny{font-size:12px;color:var(--dim);line-height:1.4}
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}.mt48{margin-top:48px}
+
+/* layout */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+@media (max-width:960px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}}
+@media (max-width:620px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:transform .4s var(--ease),background .3s}
+.card:hover{background:var(--card2)}
+.card h3{margin-bottom:8px}
+.card p{color:var(--muted);font-size:15.5px}
+.icon{font-size:28px;margin-bottom:12px;display:block}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--card2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.chip.ok{color:var(--green)}.chip.warn{color:var(--orange)}.chip.blue{color:var(--blue)}.chip.pink{color:var(--pink)}
+.stat{font-size:clamp(40px,5.4vw,72px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.g4 .stat{font-size:clamp(34px,4vw,54px)}
+.src{font-size:12px;color:var(--dim);margin-top:10px}
+.src a{color:var(--dim);text-decoration:underline}
+
+/* ---------- cover ---------- */
+.cover{background:#000}
+.cover .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;animation:float 14s ease-in-out infinite}
+.cover .o1{width:520px;height:520px;background:#2997ff;top:-120px;right:-80px}
+.cover .o2{width:460px;height:460px;background:#a78bfa;bottom:-160px;left:-120px;animation-delay:-5s}
+.cover .o3{width:300px;height:300px;background:#ff6b9a;top:40%;left:55%;animation-delay:-9s;opacity:.35}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
+.cover .wrap{position:relative;z-index:2;align-items:flex-start}
+.cover .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.kbd{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:7px;border:1px solid var(--line);background:var(--card2);color:var(--muted)}
+
+/* ---------- agenda ---------- */
+.agenda{counter-reset:a}
+.agenda button{text-align:left;width:100%;display:flex;gap:14px;align-items:baseline;padding:16px 18px;border-radius:16px;background:var(--card);border:1px solid var(--line);transition:.3s var(--ease)}
+.agenda button:hover{background:var(--card2);transform:translateY(-2px)}
+.agenda .n{font-weight:700;color:var(--blue);font-variant-numeric:tabular-nums;min-width:28px}
+.agenda .t{font-weight:600}.agenda .m{margin-left:auto;font-size:12px;color:var(--dim);white-space:nowrap}
+
+/* ---------- flip cards ---------- */
+.flip{perspective:1400px;height:250px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .8s var(--ease);transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;border:1px solid var(--line)}
+.flip .front{background:var(--card)}
+.flip .back{transform:rotateY(180deg);background:linear-gradient(160deg,rgba(41,151,255,.22),rgba(167,139,250,.18));border-color:rgba(41,151,255,.4)}
+.flip .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.flip .front .tag{color:var(--dim)}.flip .back .tag{color:var(--teal)}
+.flip h3{font-size:20px}
+.flip p{font-size:15px;color:var(--muted);margin-top:8px}
+.flip .back p{color:#d9d9de}
+.flip .hint{margin-top:auto;font-size:12px;color:var(--dim)}
+@media (max-width:620px){.flip{height:230px}}
+
+/* ---------- timeline ---------- */
+.tl{position:relative;display:flex;gap:12px;overflow-x:auto;padding:28px 4px 18px;scroll-snap-type:x mandatory}
+.tl::before{content:"";position:absolute;left:0;right:0;top:41px;height:2px;background:linear-gradient(90deg,transparent,var(--line) 4%,var(--line) 96%,transparent)}
+.tl::-webkit-scrollbar{height:6px}.tl::-webkit-scrollbar-thumb{background:rgba(127,127,127,.35);border-radius:6px}
+.ev{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:12px;width:120px;text-align:left}
+.ev .dot{width:28px;height:28px;border-radius:50%;background:var(--bg);border:2px solid var(--dim);position:relative;z-index:1;transition:.3s var(--ease);display:grid;place-items:center;font-size:12px}
+.ev .d{font-size:12px;font-weight:700;color:var(--dim);letter-spacing:.02em}
+.ev .l{font-size:13.5px;font-weight:600;line-height:1.25}
+.ev:hover .dot,.ev.sel .dot{transform:scale(1.25);border-color:var(--c,var(--blue));background:var(--c,var(--blue))}
+.ev.sel .d{color:var(--c,var(--blue))}
+.tl-detail{min-height:118px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.tl-detail .big{font-size:44px;line-height:1}
+.tl-detail h3{font-size:24px;margin-bottom:6px}
+
+/* ---------- tabs ---------- */
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:14px;background:var(--card);border:1px solid var(--line);flex-wrap:wrap}
+.seg button{padding:9px 16px;border-radius:10px;font-weight:600;font-size:14.5px;color:var(--muted);transition:.25s var(--ease)}
+.seg button.on{background:var(--fg);color:var(--bg)}
+.pane{display:none}.pane.on{display:grid;animation:pop .5s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.model{display:flex;flex-direction:column;gap:6px}
+.model .name{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.model .when{font-size:12px;font-weight:600;color:var(--dim)}
+.model p{font-size:14.5px}
+
+/* ---------- video ---------- */
+.video{border-radius:20px;overflow:hidden;background:#111;border:1px solid var(--line);display:flex;flex-direction:column}
+.video .screen{position:relative;aspect-ratio:16/9;background:#000 center/cover no-repeat;cursor:pointer;overflow:hidden}
+.video .screen::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 40%,rgba(0,0,0,.65))}
+.video .play{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:grid;place-items:center;transition:.3s var(--ease);border:1px solid rgba(255,255,255,.35)}
+.video .screen:hover .play{transform:translate(-50%,-50%) scale(1.08);background:rgba(255,255,255,.32)}
+.video .play svg{width:24px;height:24px;margin-left:4px;fill:#fff}
+.video .range{position:absolute;z-index:2;left:12px;bottom:12px;font-size:12px;font-weight:700;color:#fff;background:rgba(0,0,0,.55);padding:5px 9px;border-radius:8px;backdrop-filter:blur(8px)}
+.video .lang{position:absolute;z-index:2;right:12px;top:12px;font-size:11px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);padding:4px 8px;border-radius:7px}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:5}
+.video .screen.playing{cursor:default}
+.video .screen.playing::after,.video .screen.playing .play,.video .screen.playing .range,.video .screen.playing .lang{display:none}
+.video .cap{padding:12px 14px 14px;display:flex;flex-direction:column;gap:3px;background:var(--card)}
+.video .cap b{font-size:14px;line-height:1.3;color:var(--fg);font-weight:600}
+.video .cap span{font-size:12px;color:var(--dim)}
+.video .cap a{font-size:12px}
+.slide.light .video{background:#000}
+.slide.light .video .cap{background:#fff}
+
+/* ---------- AGI levels ---------- */
+.levels{display:flex;flex-direction:column;gap:8px}
+.lv{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-align:left;transition:.3s var(--ease);position:relative}
+.lv .num{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:800;background:var(--card2);flex:0 0 auto}
+.lv .tx b{display:block;font-size:16px}.lv .tx span{font-size:13.5px;color:var(--muted)}
+.lv.on{border-color:var(--blue);background:rgba(41,151,255,.12)}
+.lv.done .num{background:var(--green);color:#000}
+.lv.now .num{background:var(--orange);color:#000}
+.lv .here{margin-left:auto;font-size:11px;font-weight:800;color:#000;background:var(--orange);padding:4px 8px;border-radius:999px;white-space:nowrap}
+
+/* poll */
+.poll .opt{display:grid;grid-template-columns:110px 1fr 40px 40px 40px;align-items:center;gap:8px;margin:8px 0}
+.poll .bar{height:30px;border-radius:9px;background:var(--card);overflow:hidden;position:relative}
+.poll .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--grad);border-radius:9px;transition:width .6s var(--ease)}
+.poll .bar em{position:absolute;right:10px;top:6px;font-style:normal;font-size:13px;font-weight:700}
+.poll .lab{font-weight:600;font-size:14.5px}
+.poll .pm{width:36px;height:30px;border-radius:9px;background:var(--card2);font-weight:800}
+.poll .pm:hover{background:var(--blue);color:#fff}
+.poll .cnt{text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+@media (max-width:620px){.poll .opt{grid-template-columns:80px 1fr 34px 34px 34px}}
+
+/* METR slider */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:var(--card2);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.4);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:0;cursor:pointer}
+.meter{display:flex;align-items:flex-end;gap:6px;height:170px;margin-top:18px}
+.meter div{flex:1;border-radius:8px 8px 3px 3px;background:var(--grad);opacity:.9;transition:height .5s var(--ease);min-height:3px}
+
+/* prompt builder */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;font-weight:600;color:var(--muted)}
+select,input[type=text],textarea{font:inherit;font-size:15px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none;width:100%}
+select:focus,input[type=text]:focus{border-color:var(--blue)}
+.slide.light select,.slide.light input[type=text]{background:#fff}
+.out{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.55;background:#0b0b0f;color:#e8e8ed;border-radius:18px;padding:20px;min-height:260px;border:1px solid rgba(255,255,255,.08)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;background:var(--blue);color:#fff;font-weight:600;font-size:15px;transition:.25s var(--ease)}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn.ghost{background:var(--card2);color:var(--fg)}
+
+/* quiz */
+.q{display:none}.q.on{display:block;animation:pop .5s var(--ease)}
+.q .opts{display:grid;gap:10px;margin-top:22px}
+.q .opts button{text-align:left;padding:16px 18px;border-radius:16px;background:var(--card);border:1px solid var(--line);font-size:17px;font-weight:500;transition:.25s var(--ease)}
+.q .opts button:hover{background:var(--card2)}
+.q .opts button.right{background:rgba(48,209,88,.18);border-color:var(--green)}
+.q .opts button.wrong{background:rgba(255,69,58,.15);border-color:#ff453a}
+.q .why{margin-top:16px;color:var(--muted);min-height:48px}
+.qdots{display:flex;gap:6px}
+.qdots i{width:28px;height:4px;border-radius:4px;background:var(--card2)}
+.qdots i.on{background:var(--blue)}
+
+/* creators */
+.cr{display:flex;flex-direction:column;gap:10px}
+.cr .av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff}
+.cr .who{font-weight:700;font-size:17px}
+.cr .what{font-size:14px;color:var(--muted);line-height:1.45}
+.cr a.go{font-size:13.5px;font-weight:600;margin-top:auto}
+
+/* case cards */
+.case .num{font-size:clamp(30px,3.4vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:8px 0}
+.conf{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+
+/* ---------- chrome ---------- */
+#bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;
+  background:rgba(28,28,30,.72);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 40px rgba(0,0,0,.35);color:#f5f5f7;transition:opacity .4s}
+#bar button{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#f5f5f7;transition:.2s}
+#bar button:hover{background:rgba(255,255,255,.12)}
+#bar svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#bar .ttl{font-size:13px;font-weight:600;padding:0 10px;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar .ctr{font-size:12px;color:#a1a1a6;font-variant-numeric:tabular-nums;padding-right:8px}
+#bar .tm{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;padding:0 10px;border-left:1px solid rgba(255,255,255,.12);color:#a1a1a6;cursor:pointer}
+#bar .tm.run{color:var(--green)}
+@media (max-width:700px){#bar .ttl{display:none}}
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--grad);z-index:60;transition:width .6s var(--ease)}
+#brand{position:fixed;top:18px;left:22px;z-index:40;font-size:13px;font-weight:600;color:var(--muted);mix-blend-mode:difference;color:#bbb;pointer-events:none}
+
+#overview{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.82);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);display:none;overflow:auto;padding:70px clamp(16px,5vw,70px)}
+#overview.on{display:block;animation:pop .4s var(--ease)}
+#overview .og{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;max-width:1200px;margin:24px auto 0}
+#overview button{text-align:left;padding:18px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);min-height:110px;display:flex;flex-direction:column;gap:8px;color:#f5f5f7}
+#overview button:hover{background:rgba(255,255,255,.12)}
+#overview button.cur{border-color:var(--blue)}
+#overview .on2{font-size:12px;color:#86868b;font-weight:700}
+#overview h2{max-width:1200px;margin:0 auto;font-size:34px}
+
+#notes{position:fixed;left:50%;bottom:76px;transform:translate(-50%,20px);z-index:55;width:min(760px,calc(100vw - 32px));max-height:42vh;overflow:auto;padding:20px 22px;border-radius:20px;
+  background:rgba(28,28,30,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.12);color:#e8e8ed;opacity:0;pointer-events:none;transition:.35s var(--ease);font-size:15px;line-height:1.55}
+#notes.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+#notes h4{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+#notes ul{padding-left:18px}#notes li{margin:4px 0}
+
+#toast{position:fixed;top:20px;left:50%;transform:translate(-50%,-20px);z-index:90;padding:12px 18px;border-radius:14px;background:rgba(28,28,30,.92);color:#f5f5f7;font-size:14px;max-width:min(640px,calc(100vw - 32px));opacity:0;pointer-events:none;transition:.4s var(--ease);border:1px solid rgba(255,255,255,.12)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.hide-ui #bar,.hide-ui #brand{opacity:0}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="brand">UCV · Novedades IA</div>
+
+<main id="deck">
+
+<!-- 1 · PORTADA -->
+<section class="slide cover" data-title="Portada" data-min="1" data-notes="<ul><li>Bienvenida. Hoy no es teoría: es un recorrido por lo que la IA <b>ya hace</b> en noviembre de 2026.</li><li>Pide a los estudiantes que abran la presentación en su pantalla si la compartes, y que anoten 1 cosa que les sorprenda.</li><li>Atajos: ← → para avanzar, O para el índice, N para estas notas, T para el cronómetro.</li></ul>">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="wrap">
+    <div class="eyebrow r">Gestión del aprendizaje con IA · Noviembre 2026</div>
+    <h1 class="r">La IA ya no<br><span class="grad">solo responde.</span><br>Ahora trabaja.</h1>
+    <p class="lead r mt24">Un recorrido de 30 minutos por lo que cambió este año: los modelos, Anthropic, la carrera hacia la AGI, lo que puedes construir en clase y cómo se está transformando la educación.</p>
+    <div class="meta r">
+      <span class="chip">🗓️ Actualizado al 4 nov 2026</span>
+      <span class="chip">🎬 Clips cortos de video</span>
+      <span class="chip">🖐️ Interactivo</span>
+      <span class="chip"><span class="kbd">←</span><span class="kbd">→</span> navegar · <span class="kbd">O</span> índice<span class="notes-only"> · <span class="kbd">N</span> notas</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · AGENDA -->
+<section class="slide" data-title="El mapa de hoy" data-min="1" data-notes="<ul><li>Muestra el recorrido. Cada bloque se puede abrir con un clic si quieres saltar.</li><li>Si tienes poco tiempo: prioriza 3, 5, 7, 9, 12 y 13.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">El mapa de hoy</div>
+    <h2 class="r">Nueve paradas. <span class="muted">Treinta minutos.</span></h2>
+    <div class="grid g3 agenda mt24 r" id="agenda"></div>
+  </div>
+</section>
+
+<!-- 3 · ANTES / AHORA -->
+<section class="slide" data-title="Antes no podía. Ahora sí." data-min="4" data-notes="<ul><li>Toca cada tarjeta para voltearla. Pregunta antes: <i>¿creen que la IA ya puede hacer esto?</i></li><li>Idea fuerza: en 2023 la IA era un <b>buscador conversacional</b>. En 2026 es un <b>colaborador que ejecuta</b>.</li><li>Las cifras de Mythos y de matemáticas son reportadas por las empresas y siguen en revisión externa: dilo así.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">01 · El gran salto</div>
+    <h2 class="r">Antes no podía. <span class="grad">Ahora sí.</span></h2>
+    <p class="lead r">Toca cada tarjeta. Izquierda: la IA de 2023. Al voltear: la de 2026.</p>
+    <div class="grid g4 mt24 r" id="flips"></div>
+  </div>
+</section>
+
+<!-- 4 · LÍNEA DE TIEMPO -->
+<section class="slide" data-title="2026 en una línea" data-min="3" data-notes="<ul><li>Recorre la línea con clics. No hace falta leer todo: elige 4 o 5 hitos.</li><li>Mensaje: en <b>septiembre–octubre</b> se concentraron los lanzamientos de las tres grandes (Anthropic, OpenAI, Google).</li><li>Las fechas vienen de anuncios oficiales y prensa; algunas (Gemini 4 Carbon, fecha de IPO) son reportadas.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">02 · El año en una línea</div>
+    <h2 class="r">2026, mes a mes.</h2>
+    <p class="lead r">Haz clic en cada punto. Desliza horizontalmente para ver más.</p>
+    <div class="tl r" id="tl"></div>
+    <div class="card tl-detail mt16 r" id="tld"></div>
+  </div>
+</section>
+
+<!-- 5 · MODELOS -->
+<section class="slide" data-title="Los modelos de hoy" data-min="4" data-notes="<ul><li>Usa las pestañas para comparar laboratorios. No memorizar nombres: lo importante es la <b>tendencia</b>: modelos más capaces, más baratos y con versiones restringidas por seguridad.</li><li>Clip sugerido: el anuncio oficial de GPT-6 Astra (inglés, 2:43) o el resumen de Gemini 4 Argon en español (1 min).</li><li>Advierte: los rankings cambian cada semana y cada empresa publica sus propios benchmarks.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">03 · El estado del arte</div>
+    <h2 class="r">Los modelos de noviembre 2026.</h2>
+    <div class="seg r" id="labs">
+      <button class="on" data-p="anth">Anthropic</button><button data-p="oai">OpenAI</button><button data-p="goo">Google</button><button data-p="open">Abiertos y China</button><button data-p="vid">Video y mundos</button>
+    </div>
+    <div class="mt24 r">
+      <div class="pane grid g3 on" data-p="anth">
+        <div class="card model"><span class="when">1 sep 2026</span><span class="name">Claude Fable 5.1</span><p class="muted">El modelo público más potente de Anthropic. Se reserva para el razonamiento más exigente.</p></div>
+        <div class="card model"><span class="when">22 sep 2026</span><span class="name">Claude Opus 5.5</span><p class="muted">Rinde a nivel de Fable 5.1 en la mayoría de tareas con ~40% menos costo que Opus 5 y +30% de velocidad.</p></div>
+        <div class="card model"><span class="when">Sep–oct 2026</span><span class="name">Sonnet 5.5 · Haiku 5.5</span><p class="muted">Haiku 5.5 (7 oct): el modelo pequeño más rápido y capaz de la familia, ideal para apps y volumen.</p></div>
+        <div class="card model"><span class="when">7 abr 2026 · restringido</span><span class="name">Claude Mythos</span><p class="muted">Tan bueno encontrando fallas de software que no se liberó al público. Solo socios de Project Glasswing.</p></div>
+        <div class="card model"><span class="when">Producto</span><span class="name">Claude Code · Cowork</span><p class="muted">Agentes que programan, editan archivos y trabajan con tus documentos. Conectores a Google Docs, Sheets y Slides (oct).</p></div>
+        <div class="card model"><span class="when">Tendencia</span><span class="name">Más barato, más rápido</span><p class="muted">Cada nueva versión iguala a la anterior "grande" a una fracción del precio.</p></div>
+      </div>
+      <div class="pane grid g3" data-p="oai">
+        <div class="card model"><span class="when">3 sep 2026</span><span class="name">GPT-6 Astra</span><p class="muted">El modelo tope de OpenAI para tareas largas y complejas. Acceso inicial para un programa de ciberseguridad.</p></div>
+        <div class="card model"><span class="when">22 sep 2026</span><span class="name">GPT-6 Sol · Luna</span><p class="muted">Versiones más eficientes. Desde el 8 oct GPT-6 llega también a usuarios gratuitos de ChatGPT.</p></div>
+        <div class="card model"><span class="when">29 sep · DevDay</span><span class="name">GPT-6.1 Sol</span><p class="muted">Se acerca a Astra a menor precio. Lanzado junto con ChatGPT Space (espacio de trabajo compartido).</p></div>
+        <div class="card model"><span class="when">29 sep · DevDay</span><span class="name">Dots</span><p class="muted">Agentes "siempre activos": cada dot tiene su propia computadora y navegador en la nube y trabaja mientras duermes.</p></div>
+        <div class="card model"><span class="when">Oct 2026</span><span class="name">Matemática y ciencia</span><p class="muted">OpenAI publicó cientos de manuscritos con soluciones a problemas abiertos. Expertos los están verificando.</p></div>
+        <div class="card model"><span class="when">Abr–sep 2026</span><span class="name">Adiós a Sora</span><p class="muted">La app de video Sora cerró en abril y su API en septiembre. OpenAI concentra fuerzas en agentes.</p></div>
+      </div>
+      <div class="pane grid g3" data-p="goo">
+        <div class="card model"><span class="when">30 sep 2026</span><span class="name">Gemini 4 Argon</span><p class="muted">El modelo más potente de Google hasta ese momento: programación, investigación y ciberseguridad. Despliegue gradual.</p></div>
+        <div class="card model"><span class="when">Fines oct 2026 · reportado</span><span class="name">Gemini 4 Carbon</span><p class="muted">Nuevo modelo de frontera con acceso limitado (programa Fairwind). Los detalles aún son escasos.</p></div>
+        <div class="card model"><span class="when">27 oct 2026 · vista previa</span><span class="name">Genie 4</span><p class="muted">Genera mundos 3D interactivos, con audio, que puedes cambiar hablando en tiempo real.</p></div>
+        <div class="card model"><span class="when">2026</span><span class="name">Gemini Omni</span><p class="muted">Reemplazó a Veo en las apps de Google: un solo modelo para texto, imagen, audio y video.</p></div>
+        <div class="card model"><span class="when">Educación</span><span class="name">Gemini en Classroom</span><p class="muted">Disponible para estudiantes donde la institución lo habilite. NotebookLM sigue siendo estrella para docentes.</p></div>
+        <div class="card model"><span class="when">Dispositivos</span><span class="name">Gemma 4</span><p class="muted">Modelos abiertos y pequeños que corren en el teléfono o la laptop, sin internet.</p></div>
+      </div>
+      <div class="pane grid g3" data-p="open">
+        <div class="card model"><span class="when">Moonshot · China</span><span class="name">Kimi K3.1 Pro</span><p class="muted">Modelo con pesos abiertos y variante "Highspeed" 2–3× más rápida.</p></div>
+        <div class="card model"><span class="when">DeepSeek · China</span><span class="name">DeepSeek</span><p class="muted">Sigue presionando precios a la baja; se espera un nuevo lanzamiento en noviembre (no confirmado).</p></div>
+        <div class="card model"><span class="when">Meta</span><span class="name">Muse Spark Open</span><p class="muted">Meta vuelve a los pesos abiertos con la familia Muse.</p></div>
+        <div class="card model"><span class="when">Por qué importa</span><span class="name">Abiertos = soberanía</span><p class="muted">Universidades y gobiernos pueden correr modelos en sus propios servidores, con sus datos.</p></div>
+        <div class="card model"><span class="when">Pequeños</span><span class="name">IA en tu bolsillo</span><p class="muted">Modelos de 5 GB que caben en un celular (Gemma 4 E4B, Liquid LFM2.5).</p></div>
+        <div class="card model"><span class="when">Ojo</span><span class="name">Benchmarks ≠ realidad</span><p class="muted">"Leí 8 rankings el mismo día y encontré 5 ganadores distintos." Prueba con tus propias tareas.</p></div>
+      </div>
+      <div class="pane grid g3" data-p="vid">
+        <div class="card model"><span class="when">Oct 2026 · Kuaishou</span><span class="name">Kling 4.0</span><p class="muted">Video nativo de 30 segundos en 4K HDR (reportado).</p></div>
+        <div class="card model"><span class="when">2026 · ByteDance</span><span class="name">Seedance 2.0</span><p class="muted">Los modelos chinos lideran las preferencias humanas en video.</p></div>
+        <div class="card model"><span class="when">Google</span><span class="name">Veo 3.1</span><p class="muted">El modelo occidental más fuerte en video: 4K y audio nativo.</p></div>
+        <div class="card model"><span class="when">Mundos</span><span class="name">Genie 4 · Marble</span><p class="muted">De "ver un video" a "entrar a un mundo". Futuras simulaciones para clase.</p></div>
+        <div class="card model"><span class="when">Robots</span><span class="name">Humanoides</span><p class="muted">Pilotos en fábricas y preventas para el hogar (1X NEO), pero aún sin uso doméstico masivo.</p></div>
+        <div class="card model"><span class="when">Riesgo</span><span class="name">Deepfakes</span><p class="muted">Cuanto mejor el video, más importante verificar la fuente.</p></div>
+      </div>
+    </div>
+    <div class="grid g2 mt24 r">
+      <div class="video" data-id="1QNsdr-Qx_I" data-start="0" data-end="163" data-lang="EN" data-title="Introducing GPT-6 Astra (anuncio oficial)" data-ch="OpenAI · 3 sep 2026"></div>
+      <div class="video" data-id="fDOdQ-ufFvA" data-start="44" data-end="114" data-lang="ES" data-title="Gemini 4 Argon: casos de uso y benchmarks" data-ch="Raúl Ordóñez · 1 oct 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · AGENTES -->
+<section class="slide" data-title="Agentes: la IA que trabaja sola" data-min="3" data-notes="<ul><li>La palabra del año: <b>agente</b>. Un agente recibe un objetivo, planifica, usa herramientas y entrega un resultado.</li><li>Mueve el deslizador: según METR, la duración de las tareas que un agente completa se ha duplicado cada ~4 meses desde 2023. Es una proyección ilustrativa, no una promesa.</li><li>Clip: Dot CSV explica cuánto tiempo pueden trabajar los agentes sin ayuda (2 min).</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">04 · La palabra del año</div>
+    <h2 class="r">De chatbot a <span class="grad">agente.</span></h2>
+    <div class="split mt16">
+      <div class="r">
+        <p class="lead">Un agente recibe un <b>objetivo</b>, arma un plan, usa herramientas (navegador, archivos, código) y vuelve con el <b>trabajo hecho</b>.</p>
+        <div class="grid g2 mt24">
+          <div class="card"><span class="icon">🟣</span><h3>Dots (OpenAI)</h3><p>Siempre activos, con su propia computadora en la nube. Te escriben por ChatGPT, Slack o Teams.</p></div>
+          <div class="card"><span class="icon">🟠</span><h3>Claude Code y Cowork</h3><p>Programan apps completas y trabajan con tus carpetas y documentos.</p></div>
+          <div class="card"><span class="icon">🔵</span><h3>Gemini con Skills</h3><p>Reemplazan a las Gems: habilidades reutilizables para tareas repetidas.</p></div>
+          <div class="card"><span class="icon">🟢</span><h3>Investigación profunda</h3><p>Leen decenas de fuentes y entregan un informe citado en minutos.</p></div>
+        </div>
+      </div>
+      <div class="card r">
+        <h3>¿Cuánto tiempo puede trabajar sola?</h3>
+        <p class="small mt8">METR mide la duración (en tiempo humano) de las tareas que los agentes completan. Desde 2023 se duplica cada ~4,3 meses.</p>
+        <div class="meter" id="meter"></div>
+        <div class="mt16"><input type="range" id="metr" min="0" max="24" value="0" aria-label="Meses desde hoy"></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline" class="mt16">
+          <div><div class="tiny">Dentro de</div><b id="metrM" style="font-size:22px">hoy</b></div>
+          <div style="text-align:right"><div class="tiny">Tarea equivalente</div><b id="metrH" class="grad" style="font-size:28px">1 jornada</b></div>
+        </div>
+        <p class="tiny mt16">Ilustrativo: parte de "1 jornada laboral (8 h)" y aplica la duplicación de METR (TH 1.1, ene 2026). Las mediciones reales tienen márgenes de error grandes.</p>
+      </div>
+    </div>
+    <div class="grid g2 mt24 r">
+      <div class="video" data-id="zEwCxAI81Xs" data-start="1237" data-end="1363" data-lang="ES" data-title="¿Cuánto tiempo pueden trabajar los agentes de IA sin ayuda?" data-ch="Carlos Santana (Dot CSV) · ago 2026"></div>
+      <div class="video" data-id="p4X_E6rMwAg" data-start="75" data-end="161" data-lang="ES" data-title="ChatGPT Dots: agentes que trabajan solos" data-ch="IA al Minuto · 8 oct 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · ANTHROPIC MYTHOS -->
+<section class="slide" data-title="Anthropic: el año de Mythos" data-min="3" data-notes="<ul><li>Historia clave del año: una empresa construye su mejor modelo y <b>decide no lanzarlo</b>.</li><li>Mythos encontró miles de vulnerabilidades graves en sistemas operativos y navegadores (según reportes). Por eso Anthropic lo compartió solo con socios para <b>defender</b>: Project Glasswing.</li><li>Pregunta para el aula: <i>¿Quién debería decidir si un modelo es demasiado peligroso para el público: la empresa, el Estado o un comité independiente?</i></li><li>Clip DW (español, 2:46).</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">05 · Anthropic</div>
+    <h2 class="r">El modelo que <span class="grad">no se lanzó.</span></h2>
+    <div class="split mt16">
+      <div class="r">
+        <p class="lead">En abril, Anthropic presentó <b>Claude Mythos</b>: tan capaz encontrando fallas de software que decidió no abrirlo al público y compartirlo solo para <b>defender</b> infraestructura crítica.</p>
+        <div class="grid g2 mt24">
+          <div class="card"><div class="stat grad">12 → ~150+</div><p class="mt8">Organizaciones con acceso a Project Glasswing, del lanzamiento (Apple, Google, Microsoft, AWS, Cisco…) a la expansión en 15+ países.</p></div>
+          <div class="card"><div class="stat grad">Miles</div><p class="mt8">De vulnerabilidades "zero-day" de alta gravedad detectadas en sistemas y navegadores, según reportes.</p></div>
+        </div>
+        <div class="card mt16">
+          <h3>Y luego, para todos</h3>
+          <p>Junio: <b>Claude Fable 5</b>, presentado como modelo "clase Mythos" con salvaguardas. Septiembre: <b>Fable 5.1</b> y <b>Opus 5.5</b>. Octubre: <b>Haiku 5.5</b>, nueva Política de Uso y la iniciativa <b>Anthropic Cyber Mission</b>.</p>
+        </div>
+      </div>
+      <div class="r">
+        <div class="video" data-id="z63Z15Q24Po" data-start="0" data-end="166" data-lang="ES" data-title="Claude Mythos: la IA que preocupa a gobiernos y expertos" data-ch="DW Tecnología · 20 jun 2026"></div>
+        <div class="card mt16"><span class="chip warn">💬 Debate</span><p class="mt8" style="color:var(--fg);font-size:17px">¿Quién debería decidir si un modelo es demasiado peligroso para el público: la empresa, el Estado o un comité independiente?</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · ANTHROPIC IPO -->
+<section class="slide light" data-title="Anthropic sale a bolsa" data-min="2" data-notes="<ul><li>26 oct: Anthropic publicó su prospecto (S-1) para cotizar en Nasdaq con el ticker <b>ANT</b>. Se reporta una valorización objetivo cercana a US$2 billones y salida antes del 26 de noviembre (no confirmado).</li><li>Dato curioso: casi 100 páginas del documento son de <b>riesgos</b>, incluidos riesgos de la propia tecnología.</li><li>Gobierno corporativo: es una Corporación de Beneficio Público y un fideicomiso (Long-Term Benefit Trust) nombra a la mayoría del directorio.</li><li><b>No es consejo financiero.</b></li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r" style="color:#bf4800">06 · Anthropic</div>
+    <h2 class="r">De laboratorio de seguridad<br>a <span class="grad">la bolsa de Nueva York.</span></h2>
+    <div class="grid g4 mt24 r">
+      <div class="card"><div class="stat">ANT</div><p class="mt8">Ticker en Nasdaq. Prospecto (S-1) público desde el 26 oct.</p><div class="src">TechCrunch · CNN</div></div>
+      <div class="card"><div class="stat">~2<span style="font-size:.36em;letter-spacing:-.01em"> billones US$</span></div><p class="mt8">Valorización objetivo reportada. En mayo valía US$965 mil millones.</p><div class="src">Bloomberg (reportado)</div></div>
+      <div class="card"><div class="stat">+1.300%</div><p class="mt8">Crecimiento de ingresos en el 1er semestre 2026: US$16,3 mil millones.</p><div class="src">CNN</div></div>
+      <div class="card"><div class="stat">~100 pág.</div><p class="mt8">Dedicadas a riesgos, incluidos los de la propia tecnología.</p><div class="src">Prospecto S-1</div></div>
+    </div>
+    <div class="split mt24 r" style="align-items:start">
+      <div class="card">
+        <h3>¿Por qué importa en un aula?</h3>
+        <p>Es la primera gran empresa de IA que sale a bolsa con una estructura de <b>beneficio público</b>: un fideicomiso independiente (Long-Term Benefit Trust) nombra a la mayoría del directorio. ¿Se puede ser rentable y priorizar la seguridad a la vez? Es un caso perfecto de <b>gobierno corporativo y ética</b>.</p>
+        <p class="tiny mt16">Información reportada por prensa; la fecha y el precio de salida no están confirmados. No es consejo financiero.</p>
+      </div>
+      <div class="video" data-id="z7NWyD0LGk4" data-start="0" data-end="196" data-lang="ES" data-title="Anthropic presenta la documentación para su salida a bolsa" data-ch="Bloomberg en Español · 26 oct 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · AGI -->
+<section class="slide" data-title="AGI: ¿ya llegamos?" data-min="4" data-notes="<ul><li>AGI = IA general: capaz de hacer la mayoría de trabajos intelectuales humanos. No hay una definición única, y eso es parte del debate.</li><li>Haz clic en los 5 niveles (la escala de OpenAI). Muchos dicen que estamos entre el 3 (agentes) y el 4 (innovadores), por los resultados en matemática.</li><li>Votación: pregunta en voz alta y registra manos con + y −.</li><li>Clip: Dot CSV sobre en qué nivel estamos (3 min).</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">07 · La gran pregunta</div>
+    <h2 class="r">AGI: <span class="grad">¿ya llegamos?</span></h2>
+    <div class="split mt16" style="align-items:start">
+      <div class="r">
+        <p class="small">La escala de 5 niveles de OpenAI. Toca un nivel.</p>
+        <div class="levels mt8" id="levels"></div>
+        <div class="card mt16" id="lvd" style="min-height:96px"></div>
+      </div>
+      <div class="r">
+        <div class="grid g2">
+          <div class="card"><span class="chip blue">OpenAI · Altman</span><p class="mt8" style="color:var(--fg)">Esperaba un sistema interno al que llamaría AGI para fines de 2026. En agosto: "todavía no del todo".</p></div>
+          <div class="card"><span class="chip blue">DeepMind · Hassabis</span><p class="mt8" style="color:var(--fg)">Acortó su plazo: hoy habla de 2028–2030.</p></div>
+          <div class="card"><span class="chip warn">Escépticos · LeCun</span><p class="mt8" style="color:var(--fg)">Las arquitecturas actuales no bastan; faltan modelos del mundo.</p></div>
+          <div class="card"><span class="chip">Pronósticos</span><p class="mt8" style="color:var(--fg)">Las comunidades de predicción ubican la mediana entre 2028 y 2033, según la definición.</p></div>
+        </div>
+        <div class="card poll mt16">
+          <h3>🗳️ ¿Cuándo llegará la AGI? <span class="tiny">(votación del aula)</span></h3>
+          <div id="poll" class="mt8"></div>
+          <button class="btn ghost mt8" id="pollReset" style="padding:7px 14px;font-size:13px">Reiniciar</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid g2 mt24 r">
+      <div class="video" data-id="zEwCxAI81Xs" data-start="166" data-end="503" data-lang="ES" data-title="Los 5 niveles hacia la AGI y en qué nivel estamos" data-ch="Carlos Santana (Dot CSV) · ago 2026"></div>
+      <div class="video" data-id="dZOl9_GQN9s" data-start="1132" data-end="1320" data-lang="ES" data-title="Agentes y AGI (conferencia)" data-ch="Carlos Santana (Dot CSV) · Afi · 28 oct 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · CIENCIA -->
+<section class="slide" data-title="La IA hace ciencia" data-min="2" data-notes="<ul><li>Octubre: OpenAI publicó 722 manuscritos con soluciones o avances en problemas matemáticos abiertos, y resultados en análisis armónico, complejidad y física. Expertos (por ejemplo, Ryan Williams, MIT) los están verificando.</li><li>Lección para estudiantes: <b>la ciencia no se valida por anuncio</b>. Se valida con revisión de pares o verificación formal (Lean).</li><li>Ya hubo manuscritos retirados en 24 h: la verificación funciona.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">08 · Más allá del chat</div>
+    <h2 class="r">La IA empieza a <span class="grad">descubrir.</span></h2>
+    <div class="grid g3 mt24 r">
+      <div class="card"><div class="stat grad">722</div><p class="mt8">Manuscritos matemáticos publicados por OpenAI en octubre, agrupados en 372 familias de problemas abiertos.</p><div class="src">Al Jazeera · Axios</div></div>
+      <div class="card"><div class="stat grad">3</div><p class="mt8">Áreas con resultados anunciados: análisis armónico, teoría de la complejidad y física cuántica de campos.</p><div class="src">OpenAI (en verificación)</div></div>
+      <div class="card"><div class="stat grad">Lean</div><p class="mt8">Asistentes de prueba formal que permiten verificar mecánicamente si una demostración es correcta.</p><div class="src">arXiv 2026</div></div>
+    </div>
+    <div class="split mt24 r" style="align-items:start">
+      <div class="card">
+        <h3>La lección para el aula</h3>
+        <p>"Estamos trabajando para verificar su demostración", dijo un experto de complejidad. Un resultado de IA <b>no es verdad porque lo anuncie una empresa</b>: se valida con revisión de pares. Algunos manuscritos ya fueron retirados en 24 horas. Ese es el método científico funcionando.</p>
+        <p class="mt16 muted">Pregunta: <i>si una IA descubre algo, ¿de quién es el mérito?</i></p>
+      </div>
+      <div class="video" data-id="QNSbI3mrrhc" data-start="1009" data-end="1139" data-lang="EN" data-title="OpenAI anunció 722 avances. ¿Se sostiene alguno? (¿Podemos confiar?)" data-ch="Nontrivial · 14 oct 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · CONSTRUIR EN CLASE -->
+<section class="slide" data-title="Lo que se puede construir en clase" data-min="3" data-notes="<ul><li>Lo más poderoso de 2026: <b>no necesitas programar para construir</b>. Describes lo que quieres y el agente lo arma.</li><li>Propón a los estudiantes elegir uno de los 6 proyectos para la próxima sesión.</li><li>Clips: demo de crear una app desde cero con Claude Code (5 min) o Gemini 4 convirtiendo una imagen en una web (2 min).</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">09 · Manos a la obra</div>
+    <h2 class="r">Lo que hoy se construye <span class="grad">en una clase.</span></h2>
+    <p class="lead r">Sin saber programar. Solo describiendo lo que quieres.</p>
+    <div class="grid g3 mt24 r">
+      <div class="card"><span class="icon">🎮</span><h3>Un juego o quiz web</h3><p>"Crea un juego de preguntas sobre KPIs con ranking." Claude, ChatGPT o Gemini lo construyen en minutos.</p><span class="chip mt16">10 min</span></div>
+      <div class="card"><span class="icon">🎧</span><h3>Un podcast de la lectura</h3><p>Sube el PDF a NotebookLM y genera un resumen en audio, en español, para repasar camino a casa.</p><span class="chip mt16">5 min</span></div>
+      <div class="card"><span class="icon">🧑‍🏫</span><h3>Un tutor del curso</h3><p>Un proyecto con el sílabo y las lecturas que responde solo con tus fuentes y cita la página.</p><span class="chip mt16">15 min</span></div>
+      <div class="card"><span class="icon">📊</span><h3>Un dashboard desde un Excel</h3><p>Sube un CSV y pide "un panel con 4 KPIs y alertas". Sale interactivo.</p><span class="chip mt16">10 min</span></div>
+      <div class="card"><span class="icon">🎭</span><h3>Una simulación de roles</h3><p>La IA hace de cliente molesto, gerente o regulador. El estudiante negocia y luego recibe retroalimentación.</p><span class="chip mt16">15 min</span></div>
+      <div class="card"><span class="icon">🔎</span><h3>Un informe investigado</h3><p>Un agente lee 30 fuentes y entrega un informe citado. El estudiante audita: ¿las fuentes son reales?</p><span class="chip mt16">20 min</span></div>
+    </div>
+    <div class="grid g3 mt24 r">
+      <div class="video" data-id="1oseAPOrB3g" data-start="917" data-end="1210" data-lang="ES" data-title="Demo real: creamos una app desde cero con Claude Code" data-ch="NocodeHackers · ene 2026"></div>
+      <div class="video" data-id="m4lpDqO6eUI" data-start="326" data-end="472" data-lang="ES" data-title="Gemini 4 Argon: de imagen a una web completa" data-ch="IA Next · 13 oct 2026"></div>
+      <div class="video" data-id="Cy-QlQg0aOs" data-start="298" data-end="334" data-lang="ES" data-title="&quot;Claude ya escribe el 90% del código de Anthropic&quot;" data-ch="Benjamín Cordero · 28 oct 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · CASOS DE ÉXITO -->
+<section class="slide light" data-title="Empresas que se movieron" data-min="3" data-notes="<ul><li>Los casos que funcionan tienen algo en común: <b>tareas acotadas + humano supervisando</b>, no autonomía total.</li><li>Contrapeso honesto: muchas empresas aún no ven retorno medible en el primer año.</li><li>Clip: Gustavo Entrala sobre la IA y los empleos (primeros 2:30).</li><li>Pregunta: <i>¿qué tarea de su futura profesión se parece a estos casos?</i></li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r" style="color:#bf4800">10 · Casos de éxito</div>
+    <h2 class="r">Empresas que <span class="grad">se movieron.</span></h2>
+    <div class="grid g3 mt24 r">
+      <div class="card case"><span class="conf" style="color:#248a3d">Logística · C.H. Robinson</span><div class="num">23 h → 14 min</div><p>Tiempo para llevar un cambio de software a producción, con agentes de desarrollo.</p><div class="src">Caso reportado por proveedor</div></div>
+      <div class="card case"><span class="conf" style="color:#248a3d">Seguros · Travelers</span><div class="num">85–90%</div><p>De reclamos completados con su asistente de IA. <b>La decisión final de pago siempre la toma una persona.</b></p><div class="src">Caso publicado 2026</div></div>
+      <div class="card case"><span class="conf" style="color:#248a3d">Servicios TI · DXC y Rimini Street</span><div class="num">−30 a 50%</div><p>En tiempos de ciclo de flujos complejos con IA agéntica (vs. −10 a 15% con automatización tradicional).</p><div class="src">TechTarget, abr 2026</div></div>
+      <div class="card case"><span class="conf" style="color:#b25000">RR.HH. · AMD</span><div class="num">−80%</div><p>En tiempo de resolución de consultas de personal; la mitad se resuelve en autoservicio.</p><div class="src">Reportado por proveedor · cautela</div></div>
+      <div class="card case"><span class="conf" style="color:#b25000">Tecnología · Anthropic</span><div class="num">~90%</div><p>Del código de la empresa lo escribe Claude, según la propia empresa.</p><div class="src">Dicho por la empresa</div></div>
+      <div class="card case"><span class="conf" style="color:#c9302c">El contrapeso</span><div class="num">23%</div><p>De despliegues con retorno medible en el primer año (Gartner). La IA no es magia: requiere rediseñar procesos.</p><div class="src">Gartner (citado)</div></div>
+    </div>
+    <div class="split mt24 r" style="align-items:start">
+      <div class="card"><h3>El patrón que se repite</h3><p>✅ Tarea acotada y medible · ✅ Datos propios ordenados · ✅ Una persona revisa y decide · ✅ Se mide antes y después (¡KPIs!). <br><br>❌ "Pongamos un chatbot y veamos qué pasa".</p></div>
+      <div class="video" data-id="q2ZjffaI9xI" data-start="0" data-end="150" data-lang="ES" data-title="La mentira que te vendieron sobre la IA y los puestos de trabajo" data-ch="Gustavo Entrala con Uri Sabat · jun 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · EDUCACIÓN -->
+<section class="slide" data-title="La IA en la educación" data-min="3" data-notes="<ul><li>Dato central: casi todos los estudiantes ya usan IA, pero solo 3 de cada 10 sienten que su institución la integra bien. <b>La brecha no es tecnológica, es pedagógica.</b></li><li>Las universidades top ya eligieron: Stanford ofrece tres plataformas; Harvard (FAS) suma Claude; UT Austin invirtió ~US$4,2 M.</li><li>Perú: la Ley 31814 y su reglamento; el Minedu impulsa DocenteTec y un plan de uso de IA en el proceso educativo.</li><li>Clip: Pocho Costa en TEDx sobre creatividad e IA (primeros 3 min).</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">11 · Educación</div>
+    <h2 class="r">Los estudiantes ya llegaron.<br><span class="grad">¿Y las instituciones?</span></h2>
+    <div class="grid g3 mt24 r">
+      <div class="card"><div class="stat grad">92%</div><p class="mt8">De estudiantes en América Latina usa IA. Docentes: 79%.</p><div class="src">Digital Education Council + Tec de Monterrey · +30.000 personas</div></div>
+      <div class="card"><div class="stat grad">30%</div><p class="mt8">Siente que su institución integra la IA de forma eficaz o le da recursos suficientes.</p><div class="src">Misma encuesta</div></div>
+      <div class="card"><div class="stat grad">1,7 M</div><p class="mt8">Universitarios en el Perú, en 90+ universidades licenciadas. Una edtech estima que el 95% ya usa IA.</p><div class="src">El Comercio · uDocz (cifra de empresa)</div></div>
+    </div>
+    <div class="grid g4 mt16 r">
+      <div class="card"><h3>Stanford</h3><p>Desde el 30 jun: ChatGPT Edu, Gemini y Claude for Education para toda su comunidad.</p></div>
+      <div class="card"><h3>Harvard (FAS)</h3><p>Suma Claude y deja ChatGPT Edu; mantiene Gemini.</p></div>
+      <div class="card"><h3>UT Austin</h3><p>ChatGPT y Claude gratis para estudiantes y personal: ~US$4,2 M en contratos.</p></div>
+      <div class="card"><h3>Perú</h3><p>Ley 31814 y su reglamento. Minedu: DocenteTec y plan para el buen uso de IA en el proceso educativo.</p></div>
+    </div>
+    <div class="split mt24 r" style="align-items:start">
+      <div class="card">
+        <h3>¿Para qué la usan los universitarios?</h3>
+        <p>El estudio de Anthropic con un millón de conversaciones encontró que los estudiantes la usan sobre todo para <b>crear</b> y <b>analizar</b>, los niveles altos de Bloom. Justo lo que queremos que hagan ellos.</p>
+        <p class="mt16" style="color:var(--fg)"><b>Pregunta:</b> si la IA crea y analiza, ¿qué queda para el estudiante? → <span class="grad"><b>juzgar, decidir y defender.</b></span></p>
+        <div class="src">Anthropic Education Report (abr 2025) · Día Mundial de los Docentes 2026: "la IA no sustituye al profesor, amplifica su capacidad".</div>
+      </div>
+      <div class="video" data-id="7RNXTsFWfT8" data-start="0" data-end="180" data-lang="ES" data-title="Potenciando la creatividad de los niños con IA" data-ch="Pablo &quot;Pocho&quot; Costa · TEDx"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · PROFESORES -->
+<section class="slide" data-title="Qué pueden hacer los profesores hoy" data-min="3" data-notes="<ul><li>Demostración en vivo: elige una tarea, escribe el curso y copia el prompt en Claude, ChatGPT o Gemini.</li><li>Fíjate que el prompt incluye la regla: <b>no compartir datos personales de estudiantes</b>.</li><li>Mensaje: evaluar el <b>proceso</b> (borradores, defensa oral, bitácora de prompts), no solo el producto.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">12 · Para docentes</div>
+    <h2 class="r">Tu asistente de clase, <span class="grad">en un prompt.</span></h2>
+    <div class="split mt16" style="align-items:start">
+      <div class="r">
+        <div class="grid g2">
+          <div class="field"><label>Quiero…</label><select id="pbTask"></select></div>
+          <div class="field"><label>Nivel</label><select id="pbLevel"><option>pregrado</option><option>posgrado / maestría</option><option>educación continua</option><option>secundaria</option></select></div>
+          <div class="field" style="grid-column:1/-1"><label>Curso y tema</label><input type="text" id="pbTopic" value="Gestión del aprendizaje con IA — indicadores (KPIs) de aprendizaje"></div>
+          <div class="field"><label>Metodología</label><select id="pbMethod"><option>aprendizaje basado en problemas</option><option>aula invertida</option><option>estudio de caso</option><option>aprendizaje cooperativo</option><option>gamificación</option></select></div>
+          <div class="field"><label>Duración</label><select id="pbTime"><option>45 minutos</option><option>90 minutos</option><option>2 sesiones</option><option>una semana</option></select></div>
+        </div>
+        <div class="grid g2 mt24">
+          <div class="card"><h3>✅ Hazlo</h3><p>Planificar, crear rúbricas y casos, dar retroalimentación, generar variantes de ejercicios, tutores con tus fuentes.</p></div>
+          <div class="card"><h3>🚫 Evita</h3><p>Subir notas o datos personales de estudiantes. Confiar en "detectores de IA". Evaluar solo el producto final.</p></div>
+        </div>
+      </div>
+      <div class="r">
+        <div class="out" id="pbOut"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" class="mt16">
+          <button class="btn" id="pbCopy">Copiar prompt</button>
+          <a class="btn ghost" href="https://claude.ai/new" target="_blank" rel="noopener">Abrir Claude</a>
+          <a class="btn ghost" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+          <a class="btn ghost" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 · ÉTICA -->
+<section class="slide light" data-title="Límites y ética" data-min="2" data-notes="<ul><li>Tres riesgos para conversar: privacidad, dependencia y poder.</li><li>Clip 1: lo que nunca debes contarle a un chatbot (2 min).</li><li>Clip 2: Gustavo Entrala sobre el Papa León XIV y la IA: 'humano = libertad' (1 min).</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r" style="color:#bf4800">13 · Con criterio</div>
+    <h2 class="r">Más poder exige <span class="grad">más criterio.</span></h2>
+    <div class="grid g4 mt24 r">
+      <div class="card"><span class="icon">🔒</span><h3>Privacidad</h3><p>Nada de datos personales, notas ni información sensible de terceros en herramientas no institucionales.</p></div>
+      <div class="card"><span class="icon">🧠</span><h3>Dependencia</h3><p>Si la IA piensa por mí, ¿qué aprendo yo? Usarla para <b>pensar mejor</b>, no para dejar de pensar.</p></div>
+      <div class="card"><span class="icon">🛡️</span><h3>Seguridad</h3><p>Modelos que encuentran fallas también pueden explotarlas. Por eso existen accesos restringidos.</p></div>
+      <div class="card"><span class="icon">⚖️</span><h3>Poder</h3><p>Pocas empresas concentran la tecnología más influyente. Gobiernos, Iglesia y universidades ya piden reglas.</p></div>
+    </div>
+    <div class="grid g2 mt24 r">
+      <div class="video" data-id="vfkyJiEqsuE" data-start="259" data-end="387" data-lang="ES" data-title="Lo que nunca le debes contar a la IA" data-ch="ElShowDelNerd · 15 oct 2026"></div>
+      <div class="video" data-id="RnFdEGGPyE4" data-start="1193" data-end="1250" data-lang="ES" data-title="El plan del Papa para frenar el poder de la IA: Humano = libertad" data-ch="Gustavo Entrala · jul 2026"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 16 · CREADORES -->
+<section class="slide" data-title="Creadores en español para seguir" data-min="2" data-notes="<ul><li>Recomendación: elegir 2 creadores y seguirlos un mes. Mejor que leer titulares sueltos.</li><li>Dot CSV para entender a fondo; Gustavo Entrala para tecnología y sociedad; Pocho Costa para aplicaciones prácticas y su podcast 'Inteligencia Artificial'.</li><li>Advertencia: títulos con MAYÚSCULAS y emojis ≠ información confiable. Contrastar siempre.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r">14 · Para seguir aprendiendo</div>
+    <h2 class="r">Creadores de IA <span class="grad">en español.</span></h2>
+    <div class="grid g4 mt24 r" id="creators"></div>
+    <p class="tiny mt16 r">Tip: un título con MAYÚSCULAS y 🤯 no es una fuente. Contrasta con el anuncio oficial o con un medio serio.</p>
+  </div>
+</section>
+
+<!-- 17 · QUIZ -->
+<section class="slide" data-title="Quiz rápido" data-min="3" data-notes="<ul><li>Lee cada pregunta en voz alta y pide que voten con la mano antes de revelar.</li><li>6 preguntas, ~30 segundos cada una.</li></ul>">
+  <div class="wrap" style="max-width:860px">
+    <div class="eyebrow r">15 · ¿Quedó claro?</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap" class="r">
+      <h2 style="margin:0">Quiz rápido.</h2>
+      <div style="display:flex;align-items:center;gap:14px"><div class="qdots" id="qdots"></div><b id="qscore" class="muted">0 / 6</b></div>
+    </div>
+    <div id="quiz" class="mt24 r"></div>
+    <div style="display:flex;gap:8px" class="mt24 r"><button class="btn ghost" id="qprev">← Anterior</button><button class="btn" id="qnext">Siguiente →</button></div>
+  </div>
+</section>
+
+<!-- 18 · CIERRE -->
+<section class="slide cover" data-title="Cierre" data-min="2" data-notes="<ul><li>Cierra con la idea de la brecha: los modelos avanzan más rápido que las personas y las instituciones.</li><li>Tarea opcional: construir uno de los 6 proyectos y traerlo la próxima clase.</li><li>Clip: 'la brecha: los modelos van adelante, la gente atrás' (1:35).</li></ul>">
+  <div class="orb o1"></div><div class="orb o2"></div>
+  <div class="wrap">
+    <div class="eyebrow r">Para llevarse</div>
+    <h1 class="r" style="font-size:clamp(40px,6.6vw,88px)">La tecnología ya llegó.<br><span class="grad">Falta el criterio.</span></h1>
+    <div class="split mt32" style="align-items:start">
+      <div class="r">
+        <div class="grid" style="gap:10px">
+          <div class="card"><h3>1 · Úsala todos los días</h3><p>Para algo real de tu curso o trabajo, no solo para "probar".</p></div>
+          <div class="card"><h3>2 · Verifica siempre</h3><p>Fuentes, cifras y citas. La IA acierta mucho y se equivoca con seguridad.</p></div>
+          <div class="card"><h3>3 · Construye algo</h3><p>Elige uno de los 6 proyectos y tráelo la próxima sesión.</p></div>
+        </div>
+      </div>
+      <div class="r">
+        <div class="video" data-id="Cy-QlQg0aOs" data-start="723" data-end="818" data-lang="ES" data-title="La brecha: los modelos van adelante, la gente atrás" data-ch="Benjamín Cordero · 28 oct 2026"></div>
+        <p class="lead mt24" style="font-size:20px">¿Preguntas? <span class="muted">Prueben, rompan, construyan.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 19 · FUENTES -->
+<section class="slide light" data-title="Fuentes" data-min="0" data-notes="<ul><li>Diapositiva de respaldo. Compártela si te piden las referencias.</li></ul>">
+  <div class="wrap">
+    <div class="eyebrow r" style="color:#bf4800">Referencias</div>
+    <h2 class="r">Fuentes.</h2>
+    <p class="small r">Consultadas el 4 de noviembre de 2026. Las cifras marcadas como "reportado" provienen de prensa o de las propias empresas y pueden cambiar.</p>
+    <div class="grid g3 mt24 r small" id="sources"></div>
+  </div>
+</section>
+
+</main>
+
+<nav id="bar" aria-label="Controles">
+  <button id="bPrev" title="Anterior (←)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <span class="ttl" id="bTitle"></span><span class="ctr" id="bCtr"></span>
+  <button id="bNext" title="Siguiente (→)"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+  <button id="bGrid" title="Índice (O)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+  <button id="bNotes" title="Notas del presentador (N)"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg></button>
+  <button id="bFull" title="Pantalla completa (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <span class="tm" id="bTimer" title="Cronómetro (T): clic para iniciar o pausar, doble clic para reiniciar">00:00</span>
+</nav>
+<div id="overview"><h2>Índice</h2><div class="og" id="og"></div></div>
+<div id="notes"></div>
+<div id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const slides = $$('.slide');
+let cur = 0;
+
+/* ---------- data ---------- */
+const FLIPS = [
+  ['💬','Respondía preguntas','Una conversación, una respuesta. Tú hacías el resto.','Ejecuta trabajos','Agentes que planifican, usan herramientas y entregan el resultado: informes, apps, análisis.'],
+  ['⏱️','Trabajaba segundos','Tareas de un par de minutos de esfuerzo humano.','Trabaja horas','La duración de las tareas que completa se duplica cada ~4 meses (METR, 2026).'],
+  ['🖱️','No tocaba tu computadora','Solo texto en una ventana de chat.','Usa navegador y apps','Dots de OpenAI tienen su propia computadora en la nube; Claude edita tus Docs, Sheets y Slides.'],
+  ['🧮','Fallaba en aritmética','Inventaba resultados de matemática escolar.','Ataca problemas abiertos','Cientos de demostraciones en problemas sin resolver, hoy en verificación por expertos.'],
+  ['🎬','Video de 4 segundos, mudo','Imágenes con manos de seis dedos.','4K, con audio, y mundos','Videos de 30 s en 4K (Kling 4.0) y mundos interactivos que se cambian hablando (Genie 4).'],
+  ['👩‍💻','Sugería código suelto','Fragmentos que había que corregir.','Construye apps completas','Describes la idea y un agente la programa, la prueba y la publica. "Vibe coding".'],
+  ['🛡️','No entendía software','Ni encontraba errores reales.','Encuentra fallas que nadie vio','Claude Mythos detectó miles de vulnerabilidades graves; por eso su acceso es restringido.'],
+  ['📚','Memoria de pocas páginas','Olvidaba el inicio de la conversación.','Lee el curso entero','Sílabos, libros, cientos de PDFs y repositorios completos en una sola sesión.']
+];
+const TL = [
+  ['Ene','📈','METR: los agentes se duplican cada ~4 meses','Nueva medición (Time Horizon 1.1): la duración de tareas que un agente completa se duplica cada ~4,3 meses desde 2023.','var(--teal)'],
+  ['7 abr','🛡️','Claude Mythos y Project Glasswing','Anthropic presenta su modelo más capaz, pero solo para 12 socios (Apple, Google, Microsoft, AWS, Cisco…) para encontrar y corregir fallas críticas.','var(--orange)'],
+  ['26 abr','🎬','Cierra la app de Sora','OpenAI apaga la app y web de Sora; la API cierra el 24 de septiembre.','var(--blue)'],
+  ['Jun','🟠','Claude Fable 5','Anthropic lanza un modelo "clase Mythos" con salvaguardas para el público general.','var(--orange)'],
+  ['30 jun','🎓','Stanford abre 3 plataformas','ChatGPT Edu, Gemini y Claude for Education para estudiantes, docentes y personal. Harvard y UT Austin hacen movimientos similares.','var(--green)'],
+  ['1 sep','🟠','Claude Fable 5.1','Nueva versión del modelo público más potente de Anthropic.','var(--orange)'],
+  ['3 sep','🟣','GPT-6 Astra','OpenAI lanza su nueva generación, empezando por un programa de ciberseguridad.','var(--blue)'],
+  ['22 sep','⚡','Opus 5.5 · GPT-6 Sol y Luna','Anthropic: nivel Fable a ~40% menos costo. OpenAI: versiones más eficientes de GPT-6.','var(--purple)'],
+  ['29 sep','🤖','OpenAI DevDay: Dots','Agentes siempre activos con su propia computadora, ChatGPT Space y GPT-6.1 Sol.','var(--blue)'],
+  ['30 sep','🔵','Gemini 4 Argon','Google vuelve a la frontera: programación, investigación y ciberseguridad. Despliegue gradual.','var(--teal)'],
+  ['Oct','🧮','722 manuscritos matemáticos','OpenAI publica soluciones y avances en problemas abiertos. La comunidad matemática los está verificando.','var(--blue)'],
+  ['7 oct','🟠','Claude Haiku 5.5','El modelo pequeño más rápido de Anthropic. Además: conectores para Google Docs, Sheets y Slides.','var(--orange)'],
+  ['8 oct','🆓','GPT-6 para todos','GPT-6 Luna llega a usuarios gratuitos de ChatGPT.','var(--blue)'],
+  ['26 oct','📄','Anthropic publica su S-1','Prospecto público para cotizar en Nasdaq con el ticker ANT.','var(--orange)'],
+  ['27 oct','🌍','Genie 4','Google DeepMind muestra mundos interactivos con audio que se modifican hablando (vista previa).','var(--teal)'],
+  ['28 oct','🔵','Gemini 4 Carbon','Nuevo modelo de frontera de Google con acceso limitado (reportado).','var(--teal)'],
+  ['Nov','🔔','¿Salida a bolsa de Anthropic?','Se reporta que podría cotizar antes del 26 de noviembre. No confirmado.','var(--pink)']
+];
+const LEVELS = [
+  ['Chatbots','IA conversacional','ChatGPT en 2022: conversa, explica, redacta.','done'],
+  ['Razonadores','Resuelve problemas como un experto','Modelos que "piensan" antes de responder (desde 2024).','done'],
+  ['Agentes','Actúa por días en tu nombre','Dots, Claude Code, investigación profunda: 2025–2026.','now'],
+  ['Innovadores','Ayuda a inventar y descubrir','Los resultados en matemática de 2026 son las primeras señales, aún en verificación.','next'],
+  ['Organizaciones','Hace el trabajo de una empresa entera','Equipos de agentes coordinados. Todavía no.','']
+];
+const POLL = ['2026–2027','2028–2030','2031–2035','Después de 2035','Nunca'];
+const TASKS = {
+  'Diseñar una sesión de clase': 'Diseña una sesión de {time} para estudiantes de {level} sobre "{topic}", usando {method}. Incluye: 1) resultado de aprendizaje medible, 2) actividad de inicio que active saberes previos, 3) desarrollo paso a paso con tiempos, 4) un momento donde los estudiantes usen IA de forma crítica (y cómo verificarán lo que les dé), 5) cierre con evidencia de aprendizaje.',
+  'Crear una rúbrica': 'Crea una rúbrica analítica para evaluar un producto de estudiantes de {level} sobre "{topic}" (metodología: {method}). Usa 4 criterios y 4 niveles de logro con descriptores observables. Incluye un criterio sobre el uso transparente y crítico de la IA (bitácora de prompts y verificación de fuentes).',
+  'Generar un caso práctico': 'Escribe un caso práctico realista y local (Perú, 2026) para estudiantes de {level} sobre "{topic}". Debe tener: contexto de una organización ficticia, un dilema con datos (incluye una pequeña tabla), 3 preguntas de análisis de dificultad creciente y una pregunta ética. Duración de trabajo: {time}.',
+  'Dar retroalimentación': 'Actúa como docente de {level} del curso "{topic}". Te pegaré el trabajo anónimo de un estudiante. Da retroalimentación en este orden: 1) dos fortalezas concretas, 2) dos mejoras prioritarias con un ejemplo de cómo hacerlo, 3) una pregunta que le haga pensar. Tono cálido y exigente. No pongas nota.',
+  'Preguntas para debate': 'Propón 6 preguntas de debate para estudiantes de {level} sobre "{topic}": 2 de comprensión, 2 de aplicación y 2 de dilema ético. Para cada una, agrega una postura a favor, una en contra y una pregunta de repregunta para el docente.',
+  'Un quiz o juego interactivo': 'Crea un quiz interactivo en una sola página HTML para estudiantes de {level} sobre "{topic}": 10 preguntas de opción múltiple con retroalimentación inmediata que explique por qué cada opción es correcta o no, contador de puntaje y diseño atractivo. Duración: {time}.'
+};
+const CREATORS = [
+  ['DC','#2997ff','Dot CSV','Carlos Santana (España). La divulgación más rigurosa en español: cómo funciona la IA y hacia dónde va.','https://www.youtube.com/c/DotCSV'],
+  ['GE','#ff9f0a','Gustavo Entrala','IA, tecnología y sociedad: empleo, poder, ética, Big Tech. Ideal para debatir.','https://www.youtube.com/@gustavo-entrala'],
+  ['PC','#30d158','Pocho Costa','Argentina. Consultor y formador; conduce el podcast "Inteligencia Artificial" y Pioneros IA. Muy práctico.','https://www.youtube.com/@pochocosta'],
+  ['XM','#a78bfa','Xavier Mitjana','Tutoriales claros de herramientas: imagen, video, agentes y automatización.','https://www.youtube.com/@XavierMitjana'],
+  ['AR','#ff6b9a','Alejavi Rivera','IA práctica y directa, con casos de uso de la vida real.','https://www.youtube.com/@alejavirivera'],
+  ['BC','#64d2ff','Benjamín Cordero','Claude Code, agentes y negocios; explica las noticias para usuarios latinoamericanos.','https://www.youtube.com/@bencord'],
+  ['IL','#ffd60a','IA Latinoamérica','Pruebas de modelos nuevos apenas salen, en español latino.','https://www.youtube.com/@IA_Latinoamerica'],
+  ['AK','#ff453a','Ana Karen Ramírez','Noticias de IA y ciencia, explicadas de forma accesible.','https://www.youtube.com/@AnaKarenRmz'],
+  ['DW','#0a84ff','DW Tecnología','Periodismo serio sobre tecnología: contexto y consecuencias.','https://www.youtube.com/@DWTecnologiaymundodigital'],
+  ['RO','#bf5af2','Raúl Ordóñez','Resúmenes semanales de lanzamientos y políticas de IA.','https://www.youtube.com/@jasp'],
+  ['LA','#5e5ce6','LatentIA','Explicaciones de benchmarks y modelos "para todos".','https://www.youtube.com/@elatentia'],
+  ['ID','#34c759','IA para docentes','Tutoriales y estrategias de IA pensados para el aula.','https://www.youtube.com/@ia-para-docentes']
+];
+const QUIZ = [
+  ['¿Qué modelo de Anthropic NO se lanzó al público por sus capacidades en ciberseguridad?',['Claude Haiku 5.5','Claude Mythos','Claude Opus 5.5'],1,'Mythos se compartió solo con socios de Project Glasswing para encontrar y corregir fallas.'],
+  ['¿Qué son los "Dots" de OpenAI?',['Un formato de imagen','Agentes siempre activos con su propia computadora en la nube','Un nuevo benchmark'],1,'Se presentaron en el DevDay del 29 de septiembre.'],
+  ['Según METR, la duración de las tareas que completan los agentes se duplica aproximadamente cada…',['4 meses','4 años','No ha cambiado desde 2023'],0,'Su medición de enero 2026 estimó ~4,3 meses.'],
+  ['¿Qué porcentaje de estudiantes de América Latina dice usar IA?',['15%','45%','92%'],2,'Y solo ~30% siente que su institución la integra bien.'],
+  ['Una demostración matemática hecha por IA es válida cuando…',['La empresa la anuncia','Expertos o un verificador formal la comprueban','Se hace viral'],1,'La ciencia se valida con revisión de pares o verificación formal (por ejemplo, Lean).'],
+  ['¿Qué NO deberías pegar en un chatbot no institucional?',['Un artículo público','Notas y datos personales de tus estudiantes','Tu borrador de sílabo'],1,'Privacidad primero: anonimiza siempre.']
+];
+const SOURCES = [
+  ['Anthropic — Newsroom','https://www.anthropic.com/news'],
+  ['MacRumors — Claude Opus 5.5 (22 sep 2026)','https://www.macrumors.com/2026/09/22/anthropic-claude-opus-5-5/'],
+  ['Wikipedia — Claude Mythos','https://en.wikipedia.org/wiki/Claude_Mythos'],
+  ['GIGAZINE — Mythos y Project Glasswing (8 abr 2026)','https://gigazine.net/gsc_news/en/20260408-anthropic-claude-mythos-project-glasswing'],
+  ['TechCrunch — Anthropic files for its public debut (26 oct 2026)','https://techcrunch.com/2026/10/26/anthropic-officially-files-for-its-public-debut/'],
+  ['CNN — Anthropic files IPO (26 oct 2026)','https://www.cnn.com/2026/10/26/tech/anthropic-files-ipo'],
+  ['Axios — Anthropic Q3 revenue, cash flow (15 oct 2026)','https://www.axios.com/2026/10/15/anthropic-q3-revenue-cash-flow'],
+  ['Bloomberg — Anthropic targets November IPO','https://www.bloomberg.com/news/articles/2026-10-01/anthropic-said-to-target-mega-ipo-before-thanksgiving-holiday'],
+  ['CNBC — OpenAI GPT-6 Astra (3 sep 2026)','https://www.cnbc.com/2026/09/03/open-ai-astra-gpt-6-cyber.html'],
+  ['Wikipedia — GPT-6','https://en.wikipedia.org/wiki/GPT-6'],
+  ['TechRadar ES — DevDay 2026: Dots y GPT-6.1 Sol','https://global.techradar.com/es-mx/ai-platforms-assistants/chatgpt/devday-2026-openai-presenta-mas-de-20-novedades-incluidos-nuevos-agentes-y-gpt-6-1-sol'],
+  ['TechCrunch — Gemini 4 Argon (30 sep 2026)','https://techcrunch.com/2026/09/30/google-releases-gemini-4-argon-called-its-most-powerful-model-yet/'],
+  ['O\'Reilly — Radar Trends, Nov 2026','https://www.oreilly.com/radar/radar-trends-to-watch-november-2026/'],
+  ['Let\'s Data Science — Genie 4','https://letsdatascience.com/news/google-announces-genie-4-world-model-with-audio-and-real-tim-63c42848'],
+  ['Al Jazeera — AI discoveries in math, CS, physics (27 oct 2026)','https://www.aljazeera.com/economy/2026/10/27/ai-makes-discoveries-in-mathematics-computer-science-physics-openai-says'],
+  ['Axios — OpenAI math proofs (8 oct 2026)','https://www.axios.com/2026/10/08/openai-math-proofs-ai-model'],
+  ['METR — Research','https://metr.org/research'],
+  ['FourWeekMBA — AGI timelines tracker','https://fourweekmba.com/agi-timelines-tracker/'],
+  ['Stanford UIT — AI tools (jun y oct 2026)','https://uit.stanford.edu/news/stanford-ai-tools-october-2026-platform-updates'],
+  ['The Harvard Crimson — FAS y Claude (28 abr 2026)','https://www.thecrimson.com/article/2026/4/28/fas-anthropic-claude/'],
+  ['The Daily Texan — UT, ChatGPT y Claude (29 oct 2026)','https://thedailytexan.com/2026/10/29/ut-agreed-to-pay-about-4-2-million-for-chatgpt-claude-education-services-contracts-show/'],
+  ['Califica.ai — IA en el aula 2026 (encuesta DEC + Tec)','https://califica.ai/cl/blog/inteligencia-artificial-en-el-aula-2026'],
+  ['El Comercio — Educación superior y tecnología','https://elcomercio.pe/peru/educacion-superior-y-tecnologia-un-tema-clave-de-cara-a-los-debates-futuros-noticia/'],
+  ['gob.pe — Proyecto DocenteTec e IA en el proceso educativo','https://www.gob.pe/institucion/ugelcanchis/informes-publicaciones/8059400-complimiento-de-acciones-del-proyecto-docente-tec-y-el-plan-para-fortalecer-el-buen-uso-y-aprovechamiento-de-la-inteligencia-artificial-en-el-proceso-educativo'],
+  ['Anthropic — Education Report: cómo usan Claude los universitarios','https://anthropic.com/news/anthropic-education-report-how-university-students-use-claude'],
+  ['IAEducativa — Día Mundial de los Docentes 2026','https://iaeducativa.org/2026/10/05/dia-mundial-de-los-docentes-2026-la-inteligencia-artificial-no-sustituye-al-profesor-amplifica-su-capacidad-de-transformar-la-educacion/'],
+  ['AI Monk — Casos de IA agéntica con ROI','https://aimonk.com/agentic-ai-examples-enterprise-roi-case-studies/'],
+  ['Kling AI — Wikipedia','https://en.wikipedia.org/wiki/Kling_AI'],
+  ['Videos: canales citados en cada clip (YouTube)','https://www.youtube.com/']
+];
+
+/* ---------- build ---------- */
+// agenda
+const AG = [['Antes / ahora',2],['El año en una línea',3],['Los modelos de hoy',4],['Agentes',5],['Anthropic',6],['AGI',8],['Construir en clase',10],['Casos de éxito',11],['Educación y docentes',12]];
+$('#agenda').innerHTML = AG.map((a,i)=>`<button data-go="${a[1]}"><span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${a[0]}</span><span class="m">${slides[a[1]].dataset.min} min</span></button>`).join('');
+$$('#agenda [data-go]').forEach(b=>b.onclick=()=>go(+b.dataset.go));
+
+// flips
+$('#flips').innerHTML = FLIPS.map(f=>`<div class="flip" tabindex="0" role="button" aria-label="Voltear: ${f[1]}"><div class="in">
+  <div class="face front"><span class="icon">${f[0]}</span><span class="tag">2023</span><h3>${f[1]}</h3><p>${f[2]}</p><span class="hint">Toca para ver 2026 ↻</span></div>
+  <div class="face back"><span class="tag">2026</span><h3>${f[3]}</h3><p>${f[4]}</p><span class="hint">Toca para volver ↻</span></div></div></div>`).join('');
+$$('.flip').forEach(c=>{c.onclick=()=>c.classList.toggle('on');c.onkeydown=e=>{if(e.key==='Enter'){c.classList.toggle('on');e.stopPropagation()}}});
+
+// timeline
+$('#tl').innerHTML = TL.map((t,i)=>`<button class="ev" data-i="${i}" style="--c:${t[4]}"><span class="d">${t[0]}</span><span class="dot"></span><span class="l">${t[2]}</span></button>`).join('');
+function tlSel(i){ $$('#tl .ev').forEach(e=>e.classList.toggle('sel',+e.dataset.i===i)); const t=TL[i];
+  $('#tld').innerHTML=`<div class="big">${t[1]}</div><div><div class="tiny" style="font-weight:700;color:${t[4]}">${t[0]} 2026</div><h3>${t[2]}</h3><p class="muted">${t[3]}</p></div>`; }
+$$('#tl .ev').forEach(e=>e.onclick=()=>tlSel(+e.dataset.i)); tlSel(1);
+
+// tabs
+$$('#labs button').forEach(b=>b.onclick=()=>{ $$('#labs button').forEach(x=>x.classList.toggle('on',x===b)); $$('.pane').forEach(p=>p.classList.toggle('on',p.dataset.p===b.dataset.p)); });
+
+// METR
+const meter=$('#meter'); const BARS=13;
+meter.innerHTML=Array.from({length:BARS},()=>'<div></div>').join('');
+function fmtH(h){ if(h<16) return Math.round(h)+' horas'; const d=h/8; if(d<10) return (Math.round(d*10)/10).toString().replace('.',',')+' jornadas'; const w=d/5; if(w<8) return (Math.round(w*10)/10).toString().replace('.',',')+' semanas laborales'; return (Math.round(d/21*10)/10).toString().replace('.',',')+' meses de trabajo'; }
+function metr(){ const m=+$('#metr').value; const h=8*Math.pow(2,m/4.3);
+  $('#metrM').textContent = m===0?'hoy':(m+(m===1?' mes':' meses')); $('#metrH').textContent = m===0?'1 jornada (8 h)':fmtH(h);
+  const max=8*Math.pow(2,24/4.3); $$('#meter div').forEach((d,i)=>{ const mm=i*2; const hh=8*Math.pow(2,mm/4.3); d.style.height=Math.max(4,Math.log(hh/4)/Math.log(max/4)*100)+'%'; d.style.opacity=mm<=m?1:.15; }); }
+$('#metr').oninput=metr; metr();
+
+// levels
+$('#levels').innerHTML = LEVELS.map((l,i)=>`<button class="lv ${l[3]==='done'?'done':''} ${l[3]==='now'?'now':''}" data-i="${i}"><span class="num">${i+1}</span><span class="tx"><b>${l[0]}</b><span>${l[1]}</span></span>${l[3]==='now'?'<span class="here">Estamos aquí</span>':''}</button>`).join('');
+function lvSel(i){ $$('.lv').forEach(x=>x.classList.toggle('on',+x.dataset.i===i)); const l=LEVELS[i];
+  $('#lvd').innerHTML=`<span class="chip ${l[3]==='done'?'ok':l[3]==='now'?'warn':''}">${l[3]==='done'?'Logrado':l[3]==='now'?'En curso (2026)':l[3]==='next'?'Primeras señales':'Futuro'}</span><h3 class="mt8">Nivel ${i+1} · ${l[0]}</h3><p class="muted mt8">${l[2]}</p>`; }
+$$('.lv').forEach(x=>x.onclick=()=>lvSel(+x.dataset.i)); lvSel(2);
+
+// poll (per viewer, guarded storage)
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let votes=store.get('ia26-poll',POLL.map(()=>0));
+function drawPoll(){ const tot=votes.reduce((a,b)=>a+b,0)||1; const mx=Math.max(...votes,1);
+  $('#poll').innerHTML=POLL.map((p,i)=>`<div class="opt"><span class="lab">${p}</span><div class="bar"><i style="width:${votes[i]/mx*100}%"></i><em>${Math.round(votes[i]/tot*100)}%</em></div><button class="pm" data-i="${i}" data-d="-1" aria-label="Restar">−</button><span class="cnt">${votes[i]}</span><button class="pm" data-i="${i}" data-d="1" aria-label="Sumar">+</button></div>`).join('');
+  $$('#poll .pm').forEach(b=>b.onclick=()=>{votes[+b.dataset.i]=Math.max(0,votes[+b.dataset.i]+ +b.dataset.d);store.set('ia26-poll',votes);drawPoll();}); }
+$('#pollReset').onclick=()=>{votes=POLL.map(()=>0);store.set('ia26-poll',votes);drawPoll();}; drawPoll();
+
+// prompt builder
+$('#pbTask').innerHTML=Object.keys(TASKS).map(t=>`<option>${t}</option>`).join('');
+function pb(){ const t=TASKS[$('#pbTask').value].replace('{time}',$('#pbTime').value).replace('{level}',$('#pbLevel').value).replace('{topic}',$('#pbTopic').value||'mi curso').replace('{method}',$('#pbMethod').value).replace('{level}',$('#pbLevel').value);
+  $('#pbOut').textContent = `Rol: eres un diseñador instruccional experto en educación superior en el Perú.\n\nTarea: ${t}\n\nFormato: usa títulos y viñetas; lenguaje claro en español.\nAntes de responder, hazme hasta 2 preguntas si te falta información clave.\n\nReglas: no inventes datos ni citas; si propones fuentes, indica que deben verificarse. No incluyas ni pidas datos personales de estudiantes.`; }
+['pbTask','pbLevel','pbMethod','pbTime'].forEach(id=>$('#'+id).onchange=pb); $('#pbTopic').oninput=pb; pb();
+$('#pbCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText($('#pbOut').textContent); toast('Prompt copiado ✓'); }catch(e){ const r=document.createRange(); r.selectNodeContents($('#pbOut')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast('Selecciona y copia con Ctrl+C'); } };
+
+// creators
+$('#creators').innerHTML=CREATORS.map(c=>`<div class="card cr"><div class="av" style="background:${c[1]}">${c[0]}</div><div class="who">${c[2]}</div><div class="what">${c[3]}</div><a class="go" href="${c[4]}" target="_blank" rel="noopener">Ver canal ↗</a></div>`).join('');
+
+// quiz
+let qi=0; const ans=QUIZ.map(()=>null);
+$('#qdots').innerHTML=QUIZ.map(()=>'<i></i>').join('');
+function drawQ(){ const q=QUIZ[qi]; const a=ans[qi];
+  $('#quiz').innerHTML=`<div class="q on"><div class="tiny">Pregunta ${qi+1} de ${QUIZ.length}</div><h3 class="mt8" style="font-size:clamp(22px,2.6vw,32px);letter-spacing:-.02em">${q[0]}</h3>
+  <div class="opts">${q[1].map((o,i)=>`<button data-i="${i}" class="${a===null?'':(i===q[2]?'right':(i===a?'wrong':''))}">${o}</button>`).join('')}</div>
+  <p class="why">${a===null?'':(a===q[2]?'✅ ¡Correcto! ':'❌ No exactamente. ')+q[3]}</p></div>`;
+  $$('#quiz .opts button').forEach(b=>b.onclick=()=>{ if(ans[qi]!==null) return; ans[qi]=+b.dataset.i; drawQ(); });
+  $$('#qdots i').forEach((d,i)=>d.classList.toggle('on',i<=qi));
+  $('#qscore').textContent=ans.filter((x,i)=>x===QUIZ[i][2]).length+' / '+QUIZ.length;
+  $('#qnext').textContent = qi===QUIZ.length-1?'Reiniciar ↺':'Siguiente →'; }
+$('#qnext').onclick=()=>{ if(qi===QUIZ.length-1){ ans.fill(null); qi=0; } else qi++; drawQ(); };
+$('#qprev').onclick=()=>{ if(qi>0){qi--;drawQ();} }; drawQ();
+
+// sources
+$('#sources').innerHTML=SOURCES.map(s=>`<a class="card" style="padding:14px 16px;display:block;color:inherit" href="${s[1]}" target="_blank" rel="noopener">${s[0]} <span style="color:var(--blue)">↗</span></a>`).join('');
+
+/* ---------- videos ---------- */
+const isFile = location.protocol==='file:';
+const fmt=s=>{s=Math.max(0,s|0);const h=s/3600|0,m=(s%3600)/60|0,ss=s%60;return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(ss).padStart(2,'0')};
+$$('.video').forEach(v=>{ const {id,start,end,lang,title,ch}=v.dataset; const dur=(+end)-(+start);
+  const yt=`https://www.youtube.com/watch?v=${id}&t=${start}s`;
+  v.innerHTML=`<div class="screen" style="background-image:url(https://i.ytimg.com/vi/${id}/hqdefault.jpg)" role="button" tabindex="0" aria-label="Reproducir clip: ${title}">
+    <span class="lang">${lang}</span><span class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+    <span class="range">▶ ${fmt(start)} → ${fmt(end)} · ${dur>=60?Math.floor(dur/60)+' min ':''}${dur%60?dur%60+' s':''}</span></div>
+    <div class="cap"><b>${title}</b><span>${ch}</span><a href="${yt}" target="_blank" rel="noopener">Abrir en YouTube desde ${fmt(start)} ↗</a></div>`;
+  const sc=$('.screen',v);
+  const play=()=>{ if(isFile){ window.open(yt,'_blank','noopener'); toast('Abierto en YouTube. Para ver los clips dentro de la presentación, ábrela con "Abrir presentacion.bat".'); return; }
+    $$('.video iframe').forEach(f=>{ const s=f.parentElement; f.remove(); s.classList.remove('playing'); });
+    const p=new URLSearchParams({start, end, autoplay:1, rel:0, modestbranding:1, playsinline:1, cc_load_policy: lang==='EN'?1:0, cc_lang_pref:'es', hl:'es'});
+    const f=document.createElement('iframe'); f.src=`https://www.youtube-nocookie.com/embed/${id}?${p}`; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; f.referrerPolicy='strict-origin-when-cross-origin'; f.title=title;
+    sc.appendChild(f); sc.classList.add('playing'); };
+  sc.onclick=play; sc.onkeydown=e=>{if(e.key==='Enter'){play();e.stopPropagation()}};
+});
+function stopVideos(){ $$('.video iframe').forEach(f=>f.remove()); }
+
+/* ---------- navigation ---------- */
+$('#og').innerHTML=slides.map((s,i)=>`<button data-i="${i}"><span class="on2">${String(i+1).padStart(2,'0')} · ${s.dataset.min||0} min</span><b>${s.dataset.title}</b></button>`).join('');
+$$('#og button').forEach(b=>b.onclick=()=>{go(+b.dataset.i);toggleOv(false);});
+function go(n){ n=Math.max(0,Math.min(slides.length-1,n)); if(n!==cur) stopVideos();
+  slides.forEach((s,i)=>{ s.classList.toggle('active',i===n); s.classList.toggle('prev',i<n); });
+  cur=n; slides[n].scrollTop=0;
+  $('#bTitle').textContent=slides[n].dataset.title; $('#bCtr').textContent=(n+1)+' / '+slides.length;
+  $('#progress').style.width=((n)/(slides.length-1)*100)+'%';
+  $('#notes').innerHTML=`<h4>Notas · ${slides[n].dataset.title} · ~${slides[n].dataset.min||0} min</h4>${slides[n].dataset.notes||''}`;
+  $$('#og button').forEach(b=>b.classList.toggle('cur',+b.dataset.i===n));
+  try{ history.replaceState(null,'','#'+(n+1)); }catch(e){}
+}
+const next=()=>go(cur+1), prev=()=>go(cur-1);
+function toggleOv(v){ $('#overview').classList.toggle('on',v===undefined?!$('#overview').classList.contains('on'):v); }
+// Notas: visibles en local o con ?notas en la dirección; en línea quedan ocultas para el público.
+const allowNotes = location.protocol==='file:' || ['localhost','127.0.0.1'].includes(location.hostname) || new URLSearchParams(location.search).has('notas');
+if(!allowNotes){ $('#bNotes').remove(); $$('.notes-only').forEach(e=>e.remove()); }
+function toggleNotes(){ if(allowNotes) $('#notes').classList.toggle('on'); }
+function full(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+$('#bNext').onclick=next; $('#bPrev').onclick=prev; $('#bGrid').onclick=()=>toggleOv(); if(allowNotes) $('#bNotes').onclick=toggleNotes; $('#bFull').onclick=full;
+
+// timer
+let t0=0, acc=0, run=false, iv=null;
+function tick(){ const s=Math.floor((acc+(run?Date.now()-t0:0))/1000); $('#bTimer').textContent=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function toggleTimer(){ if(run){acc+=Date.now()-t0;run=false;clearInterval(iv);} else {t0=Date.now();run=true;iv=setInterval(tick,500);} $('#bTimer').classList.toggle('run',run); tick(); }
+$('#bTimer').onclick=toggleTimer; $('#bTimer').ondblclick=()=>{acc=0;t0=Date.now();tick();};
+
+document.addEventListener('keydown',e=>{
+  if(e.target.closest && e.target.closest('input,select,textarea')) return;
+  const k=e.key;
+  if(['ArrowRight','PageDown',' '].includes(k)){e.preventDefault();next();}
+  else if(['ArrowLeft','PageUp'].includes(k)){e.preventDefault();prev();}
+  else if(k==='Home') go(0); else if(k==='End') go(slides.length-1);
+  else if(k==='o'||k==='O'||k==='Escape'&&$('#overview').classList.contains('on')) toggleOv();
+  else if(k==='n'||k==='N') toggleNotes();
+  else if(k==='f'||k==='F') full();
+  else if(k==='t'||k==='T') toggleTimer();
+  else if(k==='h'||k==='H') document.body.classList.toggle('hide-ui');
+});
+// swipe
+let sx=null, sy=null;
+document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5&&!e.target.closest('.tl,input')) (dx<0?next:prev)(); sx=null; },{passive:true});
+
+let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),4200); }
+const h=parseInt(location.hash.slice(1)); go(isNaN(h)?0:h-1);
+if(isFile) setTimeout(()=>toast('Consejo: abre "Abrir presentacion.bat" para que los clips se reproduzcan dentro de la presentación.'),1200);
+})();
+</script>
+</body>
+</html>
